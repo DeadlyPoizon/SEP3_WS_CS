@@ -4,22 +4,23 @@ using Grpc.Core;
 
 
 using var channel = GrpcChannel.ForAddress("http://localhost:6969");
-    var client = new HelloService.HelloServiceClient(channel);
+    var client = new BrugerService.BrugerServiceClient(channel);
 
-        HelloRequest helloRequest = new HelloRequest()
+
+        Bruger helloRequest = new Bruger()
         {
-            FirstName = "bigman",
-            LastName = "biggerman"
+            Username = "bigman",
+            Password = "biggerman",
         };
         
-        async Task<HelloResponse> HelloTask()
+        async Task<BrugerResponse> HelloTask()
     {
-        HelloResponse helloResponse = await client.helloAsync(helloRequest);
-        Console.WriteLine(helloResponse.Greeting);
+        BrugerResponse helloResponse = await client.createBrugerAsync(helloRequest);
+        Console.WriteLine(helloResponse.Response);
         return helloResponse;
         
     }
-        HelloResponse response = await HelloTask();
-        Console.WriteLine(response.Greeting);
+        BrugerResponse response = await HelloTask();
+        Console.WriteLine(response.Response);
 
 Console.WriteLine("hi");
