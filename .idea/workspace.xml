@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="bd8ed6e0-568e-4dd2-a43a-b26b91803f3d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.SEP3_WS_CS/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.SEP3_WS_CS/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.SEP3_WS_CS/.idea/indexLayout.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.SEP3_WS_CS/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AppServerMain/AppServerMain.csproj" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AppServerMain/Program.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AppServerMain/StockAPI/APIController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GRPC/GRPC.csproj" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GRPC/Program.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GRPC/Properties/launchSettings.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GRPC/Protos/greet.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GRPC/Services/GreeterService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GRPC/appsettings.Development.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GRPC/appsettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SEP3_WS_CS.sln" beforeDir="false" afterPath="$PROJECT_DIR$/SEP3_WS_CS.sln" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="2HckmvgOW7tvvr6fWfbv5kNgWFJ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bd8ed6e0-568e-4dd2-a43a-b26b91803f3d" name="Changes" comment="" />
+      <created>1668591924508</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1668591924508</updated>
+      <workItem from="1668591928372" duration="3000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
