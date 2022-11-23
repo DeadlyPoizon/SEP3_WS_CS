@@ -14,7 +14,12 @@ message BrugerResponse{
   bool response = 1;
 }
 
+message BrugerRequest{
+  string username = 1;
+}
+
 
 service BrugerService{
   rpc createBruger(Bruger) returns (BrugerResponse);
+  rpc getBruger(BrugerRequest) returns (Bruger);
 }
