@@ -22,5 +22,4 @@ using var channel = GrpcChannel.ForAddress("http://localhost:6969");
     }
         BrugerResponse response = await HelloTask();
         Console.WriteLine(response.Response);
-
-Console.WriteLine("hi");
+        
