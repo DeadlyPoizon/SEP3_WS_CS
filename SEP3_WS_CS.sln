@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppServerMain", "AppServerM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRPCService", "GRPCService\GRPCService.csproj", "{431929A4-0706-41F5-A37A-3862679DA108}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SydnetBlazor", "SydnetBlazor\SydnetBlazor.csproj", "{570163AA-91E4-488E-A33D-8D923B4B0050}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{431929A4-0706-41F5-A37A-3862679DA108}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{431929A4-0706-41F5-A37A-3862679DA108}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{431929A4-0706-41F5-A37A-3862679DA108}.Release|Any CPU.Build.0 = Release|Any CPU
+		{570163AA-91E4-488E-A33D-8D923B4B0050}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{570163AA-91E4-488E-A33D-8D923B4B0050}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{570163AA-91E4-488E-A33D-8D923B4B0050}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{570163AA-91E4-488E-A33D-8D923B4B0050}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
