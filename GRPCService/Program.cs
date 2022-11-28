@@ -3,7 +3,7 @@ using Grpc.Net.Client;
 using Grpc.Core;
 
 
-using var channel = GrpcChannel.ForAddress("http://localhost:6969");
+using var channel = GrpcChannel.ForAddress("http://localhost:1337");
 var client = new BrugerService.BrugerServiceClient(channel);
 
 
@@ -17,7 +17,8 @@ Bruger helloRequest = new Bruger()
 
 BrugerRequest request = new BrugerRequest()
 {
-    Username = "bigman3"
+    Bruger = { helloRequest },
+    Param = "hello"
 };
 
 async Task<BrugerResponse> HelloTask()
