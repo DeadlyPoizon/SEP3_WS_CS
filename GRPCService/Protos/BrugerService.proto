@@ -15,11 +15,31 @@ message BrugerResponse{
 }
 
 message BrugerRequest{
-  string username = 1;
+  repeated Bruger bruger = 1;
+  string param = 2;
 }
 
+message Aktie{
+  string navn = 1;
+  string firma = 2;
+  double pris = 3;
+  double high = 4;
+  double low = 5;
+}
+
+message AktieRequest{
+  repeated Aktie aktie = 1;
+  string param = 2;
+  int32 antal = 3;
+}
+
+message AktieResponse{
+  string response = 1;
+}
 
 service BrugerService{
   rpc createBruger(Bruger) returns (BrugerResponse);
   rpc getBruger(BrugerRequest) returns (Bruger);
+  rpc handleAktie(AktieRequest) returns (AktieResponse);
+  rpc loginBruger(BrugerRequest) returns (BrugerResponse);
 }
