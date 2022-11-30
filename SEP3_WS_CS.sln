@@ -6,6 +6,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRPCService", "GRPCService\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SydnetBlazor", "SydnetBlazor\SydnetBlazor.csproj", "{570163AA-91E4-488E-A33D-8D923B4B0050}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{FE53FD02-5458-4BDD-A7F5-F866C478B14B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI", "WebAPI\WebAPI.csproj", "{8E3CFD85-2FC3-4144-90A6-E3A5FE9CE155}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,13 @@ Global
 		{570163AA-91E4-488E-A33D-8D923B4B0050}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{570163AA-91E4-488E-A33D-8D923B4B0050}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{570163AA-91E4-488E-A33D-8D923B4B0050}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE53FD02-5458-4BDD-A7F5-F866C478B14B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE53FD02-5458-4BDD-A7F5-F866C478B14B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE53FD02-5458-4BDD-A7F5-F866C478B14B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE53FD02-5458-4BDD-A7F5-F866C478B14B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E3CFD85-2FC3-4144-90A6-E3A5FE9CE155}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E3CFD85-2FC3-4144-90A6-E3A5FE9CE155}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E3CFD85-2FC3-4144-90A6-E3A5FE9CE155}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E3CFD85-2FC3-4144-90A6-E3A5FE9CE155}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
