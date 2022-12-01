@@ -22,7 +22,12 @@
         <ModalBody>
             <Field>
                 <FieldLabel>Username</FieldLabel>
-                <TextEdit MaxLength="25" Placeholder="Username" />
+                <TextEdit MaxLength="25" Placeholder="Username">
+                    <Feedback>
+                        <ValidationSuccess>Name is good.</ValidationSuccess>
+                        <ValidationError>Enter valid name!</ValidationError>
+                            </Feedback>
+                </TextEdit>
             </Field>
             <Field>
                 <FieldLabel>Password</FieldLabel>

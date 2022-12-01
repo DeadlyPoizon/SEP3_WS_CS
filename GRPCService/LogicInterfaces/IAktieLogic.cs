@@ -2,8 +2,7 @@
 
 namespace GRPCService.LogicInterfaces;
 
-public interface IBrugerLogic
+public interface IAktieLogic
 {
-    Task<BrugerResponse> CreateBruger();
     
 }

@@ -14,7 +14,7 @@
     <BarMenu>
         <BarStart>
             <BarItem>
-                <BarLink To="#home">
+                <BarLink To="Aktier">
                     <BarIcon IconName="IconName.Dashboard" />
                     Aktier
                 </BarLink>
@@ -27,9 +27,9 @@
                     </BarDropdownToggle>
                     <BarDropdownMenu>
                         <BarDropdownItem><BarIcon IconName="IconName.Wallet"/>0 DKK</BarDropdownItem>
-                        <BarDropdownItem><BarIcon IconName="IconName.Briefcase"/>Portefølje</BarDropdownItem>
-                        <BarDropdownItem><BarIcon IconName="IconName.Book"/>Transaktioner</BarDropdownItem>
-                        <BarDropdownItem><BarIcon IconName="IconName.Wrench"/>Indstillinger</BarDropdownItem>
+                        <BarLink To="Portfolio"><BarDropdownItem><BarIcon IconName="IconName.Briefcase"/>Portefølje</BarDropdownItem></BarLink>
+                        <BarLink To="Transactions"><BarDropdownItem><BarIcon IconName="IconName.Book"/>Transaktioner</BarDropdownItem></BarLink>
+                        <BarLink To="Settings"><BarDropdownItem><BarIcon IconName="IconName.Wrench"/>Indstillinger</BarDropdownItem></BarLink>
                     </BarDropdownMenu>
                 </BarDropdown>
             </BarItem>
