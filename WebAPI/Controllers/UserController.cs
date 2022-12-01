@@ -1,4 +1,5 @@
 ﻿using GRPC.Bruger;
+using Grpc.Core;
 using GRPCService.LogicImpl;
 using GRPCService.LogicInterfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -6,15 +7,14 @@ using Bruger = Domain.Models.Bruger;
 
 namespace WebAPI.Controllers;
 
+[ApiController]
+[Route("[controller]")]
 public class UserController
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class UsersController : ControllerBase
-    {
-        private readonly IBrugerLogic brugerLogic;
+   
+    private readonly IBrugerLogic brugerLogic;
 
-        public UsersController(IBrugerLogic brugerLogic)
+        public UserController(IBrugerLogic brugerLogic)
         {
             this.brugerLogic = brugerLogic;
         }
@@ -26,8 +26,10 @@ public class UserController
             try
             {
                 BrugerResponse bruger = await brugerLogic.CreateBruger();
-                 
-                return Created($"/users/{bruger.}", user);
+                
+                Console.WriteLine(bruger.Response);
+                return Created($"/users/{bruger.Response}", bruger);
+                
             }
             catch (Exception e)
             {
@@ -39,4 +41,3 @@ public class UserController
     }
     
     
-}
