@@ -46,7 +46,7 @@
             
         </ModalBody>
         <ModalFooter>
-            <Button Color="Color.Secondary" Clicked="@HideModal"></Button>
+            <Button Color="Color.Secondary" Clicked="@HideModal">Luk</Button>
             <Button Color="Color.Success" Clicked="@HideModal">Køb</Button>
         </ModalFooter>
     </ModalContent>
@@ -55,7 +55,7 @@
 
 @code{
 
-    private List<TempAktie> aktieList = new() { new() { Firma = "Tesla", Forkortelse = "TSLA", Price = 1000, PriceHigh = 1200, PriceLow = 800}, new() { Firma = "Microsoft", Forkortelse = "MCS", Price = 500, PriceHigh = 900, PriceLow = 200} };
+    private List<TempAktie> aktieList = new() { new() { Firma = "Tesla", Forkortelse = "TSLA", Price = 1000.5, PriceHigh = 1200, PriceLow = 800}, new() { Firma = "Microsoft", Forkortelse = "MCS", Price = 500, PriceHigh = 900, PriceLow = 200} };
     
     public TempAktie? selectedAktie = new TempAktie();
 
