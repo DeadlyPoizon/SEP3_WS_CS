@@ -1,9 +1,105 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Forside</PageTitle>
+<Div>
+    <Div Position="Position.Absolute.Top.Is50.Start.Is50.Translate.Middle">
+        <h1>Sydnet</h1>
+        
+        Danmarks største investeringsplatform.
+        <br>
+        <Button Color="Color.Primary" onclick="@ShowModal">Sign up</Button>
+        <Button Color="Color.Secondary" onclick="@ShowModal2">Login</Button>
+    </Div>
+</Div>
 
-<h1>Hello, world!</h1>
+<Modal @ref="loginModal">
+    <ModalContent Centered>
+        <ModalHeader>
+            <ModalTitle>Login</ModalTitle>
+          
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <FieldLabel>Username</FieldLabel>
+                <TextEdit MaxLength="25" Placeholder="Username">
+                    <Feedback>
+                        <ValidationError>Brugeren eksisterer ikke</ValidationError>
+                            </Feedback>
+                </TextEdit>
+            </Field>
+            <Field>
+                <FieldLabel>Password</FieldLabel>
+                <TextEdit Role="TextRole.Password" Placeholder="Password">
+                    <Feedback>
+                        <ValidationError>Forkert password!</ValidationError>
+                        </Feedback>
+                </TextEdit>
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@HideModal2">Luk</Button>
+            <Button Color="Color.Primary" Clicked="@HideModal2">Login</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
 
-Welcome to your new app.
 
-<SurveyPrompt Title="How is Blazor working for you?"/>
+<Modal @ref="registerModal">
+    <ModalContent Centered>
+        <ModalHeader>
+            <ModalTitle>Sign Up</ModalTitle>
+          
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <FieldLabel>Username</FieldLabel>
+                <TextEdit MaxLength="25" Placeholder="Username">
+                    <Feedback>
+                        <ValidationSuccess>Name is good.</ValidationSuccess>
+                        <ValidationError>Enter valid name!</ValidationError>
+                            </Feedback>
+                </TextEdit>
+            </Field>
+            <Field>
+                <FieldLabel>Password</FieldLabel>
+                <TextEdit Role="TextRole.Password" Placeholder="Password" />
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@HideModal">Luk</Button>
+            <Button Color="Color.Primary" Clicked="@HideModal">Opret Bruger</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+@code{
+    private Modal registerModal;
+    private Modal loginModal;
+
+    private Task ShowModal()
+    {
+        registerModal.Show();
+
+        return Task.CompletedTask;
+    }
+
+    private Task HideModal()
+    {
+        registerModal.Hide();
+
+        return Task.CompletedTask;
+    }
+    
+    private Task ShowModal2()
+    {
+        loginModal.Show();
+
+        return Task.CompletedTask;
+    }
+
+    private Task HideModal2()
+    {
+        loginModal.Hide();
+
+        return Task.CompletedTask;
+    }
+}

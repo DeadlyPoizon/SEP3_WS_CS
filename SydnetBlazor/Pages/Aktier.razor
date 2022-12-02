@@ -1,0 +1,87 @@
+﻿@page "/Aktier"
+@using SydnetBlazor.Data
+
+<body>
+
+<h3>Aktier</h3>
+<DataGrid TItem="TempAktie" Data="@aktieList" @bind-SelectedRow="@selectedAktie" Filterable Responsive>
+    <DataGridColumn Field="@nameof( TempAktie.Firma )" Caption="Firma" Editable="false" ></DataGridColumn>
+    <DataGridColumn Field="@nameof( TempAktie.Forkortelse )" Caption="Forkortelse" Editable="false" Filterable="false"></DataGridColumn>
+    <DataGridColumn Field="@nameof( TempAktie.Price )" Caption="Pris" Editable="false" Filterable="false"></DataGridColumn>
+    <DataGridColumn Field="@nameof( TempAktie.PriceHigh )" Caption="Høj" Editable="false" Filterable="false"></DataGridColumn>
+    <DataGridColumn Field="@nameof( TempAktie.PriceLow )" Caption="Lav" Editable="false" Filterable="false"></DataGridColumn>
+    <DataGridColumn Filterable="false"><DisplayTemplate>
+        <Button Color="Color.Success" Clicked="@(()=>ShowModal())">
+            Køb
+        </Button>
+    </DisplayTemplate></DataGridColumn>
+</DataGrid>
+</body>
+
+<Modal @bind-Visible="@modalVisible">
+    <ModalContent Centered>
+        <ModalHeader>
+            <ModalTitle>Køb aktier</ModalTitle>
+          
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <FieldLabel>Firma</FieldLabel>
+                <TextEdit Text="@selectedAktie.Firma" ReadOnly="true" />
+            </Field>
+            <Field>
+                <FieldLabel>Pris</FieldLabel>
+                <TextEdit Text="@selectedAktie.Price.ToString()" ReadOnly="true"/>
+            </Field>
+            
+            <Field>
+                <FieldLabel>Antal</FieldLabel>
+                <NumericEdit @bind-Value="AktieAntal" @onchange="updatePrice" TValue="int"/>
+            </Field>
+            
+            <Field>
+                <FieldLabel>Ordre Pris</FieldLabel>
+                <NumericEdit @bind-Value="AktieTotal" TValue="double" ReadOnly="true"/>
+            </Field>
+            
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@HideModal">Luk</Button>
+            <Button Color="Color.Success" Clicked="@HideModal">Køb</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+
+@code{
+
+    private List<TempAktie> aktieList = new() { new() { Firma = "Tesla", Forkortelse = "TSLA", Price = 1000.5, PriceHigh = 1200, PriceLow = 800}, new() { Firma = "Microsoft", Forkortelse = "MCS", Price = 500, PriceHigh = 900, PriceLow = 200} };
+    
+    public TempAktie? selectedAktie = new TempAktie();
+
+    public int AktieAntal = 0;
+    public double AktieTotal = 0.00;
+
+    private bool modalVisible;
+
+    private Task ShowModal()
+    {
+        
+        modalVisible = true;
+
+        return Task.CompletedTask;
+    }
+
+    private Task HideModal()
+    {
+        modalVisible = false;
+
+        return Task.CompletedTask;
+    }
+    
+    private void updatePrice()
+    {
+        AktieTotal = AktieAntal * selectedAktie.Price;
+    }
+    
+}
