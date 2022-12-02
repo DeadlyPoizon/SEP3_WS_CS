@@ -3,13 +3,8 @@
      Breakpoint="Breakpoint.Desktop"
      NavigationBreakpoint="Breakpoint.Tablet"
      ThemeContrast="ThemeContrast.Dark">
-    <BarBrand>
-        <BarItem>
-            <BarLink To="#">
-                <BarIcon IconName="IconName.Dashboard" />
-                Sydnet
-            </BarLink>
-        </BarItem>
+    <BarBrand Style="@logoTopBrand">
+        <a href="/" style="@logoTop"><img class="logo" src="Sydnet_Logo.png"/></a>
     </BarBrand>
     <BarMenu>
         <BarStart>
@@ -19,6 +14,12 @@
                     Aktier
                 </BarLink>
             </BarItem>
+            <BarItem Disabled>
+                            <BarLink disabled="true">
+                                <BarIcon IconName="IconName.Seedling" />
+                                Rangliste
+                            </BarLink>
+                        </BarItem>
             <BarItem>
                 <BarDropdown>
                     <BarDropdownToggle>
@@ -38,4 +39,6 @@
 </Bar>
 
 @code {
+    string logoTop = $"height: 100px;";
+    string logoTopBrand = $"height: 100px;";
 }
