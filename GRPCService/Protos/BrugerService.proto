@@ -33,6 +33,10 @@ message AktieRequest{
   int32 antal = 3;
 }
 
+message AktieName{
+  string name = 1;
+}
+
 message AktieResponse{
   string response = 1;
 }
@@ -42,4 +46,5 @@ service BrugerService{
   rpc getBruger(BrugerRequest) returns (Bruger);
   rpc handleAktie(AktieRequest) returns (AktieResponse);
   rpc loginBruger(BrugerRequest) returns (BrugerResponse);
+  rpc getAktie(AktieName) returns (Aktie);
 }

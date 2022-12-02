@@ -1,6 +1,10 @@
 ﻿using System.Net;
 using System.Text.Json;
-using System.Text.RegularExpressions;
+using System.Text.Json.Serialization;
+using Domain.Models;
+using Json.Net;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace AppServerMain.StockAPI;
 
@@ -21,10 +25,10 @@ public class APIController
         FilePath = path;
       query = new Uri("https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&apikey=DMBU4F0ZU7OHSIF6&datatype=json");
    
-   init();
+   Init();
    }
 
-  async void init()
+  async void Init()
    {
       using (WebClient client = new WebClient())
       {
@@ -34,10 +38,25 @@ public class APIController
         {
            WriteIndented = true
         });
-        await File.WriteAllTextAsync(FilePath,stocksToJson);
-        StreamReader r = new StreamReader(FilePath);
-        dynamic output = r.ReadToEndAsync();
-        await Console.WriteLine(output);
+        using (StreamReader r = new StreamReader(FilePath))
+        {
+           string json = r.ReadToEnd();
+           Console.WriteLine(json);
+           List<Aktie> aktier = new List<Aktie>();
+
+           dynamic array = JsonConvert.DeserializeObject(json);
+
+           foreach (var index in array)
+           {
+              aktier.Add(new Aktie()
+              {
+                 Firma = array{1}
+              });
+           }
+        }
+        //await File.WriteAllTextAsync(FilePath,stocksToJson);
+        //StreamReader r = new StreamReader(FilePath);
+        //dynamic output = r.ReadToEndAsync();
       }
       
    }
