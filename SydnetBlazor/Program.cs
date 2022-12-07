@@ -4,8 +4,11 @@ using Blazorise.Icons.FontAwesome;
 using HttpClients.ClientInterfaces;
 using HttpClients.Implementations;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
+using SydnetBlazor.Auth;
 using SydnetBlazor.Data;
+using SydnetBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services
@@ -28,6 +31,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<IAktieService, AktieServiceImpl>();
+builder.Services.AddScoped<IAuthService, JWTAuthService>();
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthProvider>();
 
 var app = builder.Build();
 
