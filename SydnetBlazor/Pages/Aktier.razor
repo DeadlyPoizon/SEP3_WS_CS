@@ -1,17 +1,19 @@
 ﻿@page "/Aktier"
 @using SydnetBlazor.Data
+@using Domain.Models
+@using Domain.Models
+@using HttpClients.ClientInterfaces
+@inject IAktieService AktieService
 
 <body>
 
 <h3>Aktier</h3>
-<TextEdit @bind-Text="@customFilterValue" Placeholder="Aktienavn" ></TextEdit>
-<br/>
-<DataGrid TItem="TempAktie" Data="@aktieList" @bind-SelectedRow="@selectedAktie" CustomFilter="@OnCustomFilter" Responsive>
-    <DataGridColumn Field="@nameof( TempAktie.Firma )" Caption="Firma" Editable="false" ></DataGridColumn>
-    <DataGridColumn Field="@nameof( TempAktie.Forkortelse )" Caption="Forkortelse" Editable="false" Filterable="false"></DataGridColumn>
-    <DataGridColumn Field="@nameof( TempAktie.Price )" Caption="Pris" Editable="false" Filterable="false"></DataGridColumn>
-    <DataGridColumn Field="@nameof( TempAktie.PriceHigh )" Caption="Høj" Editable="false" Filterable="false"></DataGridColumn>
-    <DataGridColumn Field="@nameof( TempAktie.PriceLow )" Caption="Lav" Editable="false" Filterable="false"></DataGridColumn>
+<DataGrid TItem="Aktie" Data="@aktier" @bind-SelectedRow="@selectedAktie" Filterable Responsive>
+    <DataGridColumn Field="@nameof( Aktie.Firma )" Caption="Firma" Editable="false" ></DataGridColumn>
+    <DataGridColumn Field="@nameof( Aktie.Navn)" Caption="Forkortelse" Editable="false" Filterable="false"></DataGridColumn>
+    <DataGridColumn Field="@nameof( Aktie.Pris)" Caption="Pris" Editable="false" Filterable="false"></DataGridColumn>
+    <DataGridColumn Field="@nameof( Aktie.High )" Caption="Høj" Editable="false" Filterable="false"></DataGridColumn>
+    <DataGridColumn Field="@nameof( Aktie.Low)" Caption="Lav" Editable="false" Filterable="false"></DataGridColumn>
     <DataGridColumn Filterable="false"><DisplayTemplate>
         <Button Color="Color.Success" Clicked="@(()=>ShowModal())">
             Køb
@@ -33,7 +35,7 @@
             </Field>
             <Field>
                 <FieldLabel>Pris</FieldLabel>
-                <TextEdit Text="@selectedAktie.Price.ToString()" ReadOnly="true"/>
+                <TextEdit Text="@selectedAktie.Pris.ToString()" ReadOnly="true"/>
             </Field>
             
             <Field>
@@ -56,16 +58,31 @@
 
 
 @code{
-
-    private List<TempAktie> aktieList = new() { new() { Firma = "Tesla", Forkortelse = "TSLA", Price = 1000.5, PriceHigh = 1200, PriceLow = 800}, new() { Firma = "Microsoft", Forkortelse = "MCS", Price = 500, PriceHigh = 900, PriceLow = 200} };
     
-    public TempAktie? selectedAktie = new TempAktie();
+    private IEnumerable<Aktie>? aktier;
+    private string msg = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        msg = "";
+        try
+        {
+            aktier = await AktieService.Getaktie();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+
+
+    public Aktie? selectedAktie = new Aktie();
 
     public int AktieAntal = 0;
     public double AktieTotal = 0.00;
 
     private bool modalVisible;
-    private string customFilterValue;
 
     private Task ShowModal()
     {
@@ -84,18 +101,7 @@
     
     private void updatePrice()
     {
-        AktieTotal = AktieAntal * selectedAktie.Price;
+        AktieTotal = AktieAntal * selectedAktie.Pris;
     }
-    
-    private bool OnCustomFilter( TempAktie model )
-    {
-    // We want to accept empty value as valid or otherwise
-    // datagrid will not show anything.
-        if ( string.IsNullOrEmpty( customFilterValue ) )
-            return true;
-
-        return model.Firma.Contains( customFilterValue, StringComparison.OrdinalIgnoreCase ) == true;
-    }
-    
     
 }

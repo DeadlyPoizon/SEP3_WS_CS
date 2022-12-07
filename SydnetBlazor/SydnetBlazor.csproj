@@ -12,4 +12,8 @@
       <PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.1.4.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\HttpClients\HttpClients.csproj" />
+    </ItemGroup>
+
 </Project>
