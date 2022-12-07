@@ -50,8 +50,24 @@ public class AktieLogic : IAktieLogic
         throw new NotImplementedException();
     }
 
-    public Task<Aktie> getAktie(string name)
+    public async Task<Aktie> getAktie(string name)
     {
-        throw new NotImplementedException();
+        var client = new BrugerService.BrugerServiceClient(GrpcChannel.ForAddress("http://localhost:1337"));
+        
+        AktieName aktieName = new AktieName()
+        {
+            Name = name
+        };
+
+        GRPC.Bruger.Aktie grpcAktie = await client.getAktieAsync(aktieName);
+        Aktie aktie = new Aktie()
+        {
+            Firma = grpcAktie.Firma,
+            High = grpcAktie.High,
+            Low = grpcAktie.Low,
+            Navn = grpcAktie.Navn,
+            Pris = grpcAktie.Pris
+        };
+        return aktie;
     }
 }
