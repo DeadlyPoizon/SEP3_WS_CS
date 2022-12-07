@@ -4,7 +4,9 @@
 <body>
 
 <h3>Aktier</h3>
-<DataGrid TItem="TempAktie" Data="@aktieList" @bind-SelectedRow="@selectedAktie" Filterable Responsive>
+<TextEdit @bind-Text="@customFilterValue" Placeholder="Aktienavn" ></TextEdit>
+<br/>
+<DataGrid TItem="TempAktie" Data="@aktieList" @bind-SelectedRow="@selectedAktie" CustomFilter="@OnCustomFilter" Responsive>
     <DataGridColumn Field="@nameof( TempAktie.Firma )" Caption="Firma" Editable="false" ></DataGridColumn>
     <DataGridColumn Field="@nameof( TempAktie.Forkortelse )" Caption="Forkortelse" Editable="false" Filterable="false"></DataGridColumn>
     <DataGridColumn Field="@nameof( TempAktie.Price )" Caption="Pris" Editable="false" Filterable="false"></DataGridColumn>
@@ -63,6 +65,7 @@
     public double AktieTotal = 0.00;
 
     private bool modalVisible;
+    private string customFilterValue;
 
     private Task ShowModal()
     {
@@ -83,5 +86,16 @@
     {
         AktieTotal = AktieAntal * selectedAktie.Price;
     }
+    
+    private bool OnCustomFilter( TempAktie model )
+    {
+    // We want to accept empty value as valid or otherwise
+    // datagrid will not show anything.
+        if ( string.IsNullOrEmpty( customFilterValue ) )
+            return true;
+
+        return model.Firma.Contains( customFilterValue, StringComparison.OrdinalIgnoreCase ) == true;
+    }
+    
     
 }
