@@ -4,7 +4,7 @@ using GRPCService.LogicImpl;
 using GRPCService.LogicInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using Bruger = Domain.Models.Bruger;
-
+/*
 namespace WebAPI.Controllers;
 
 [ApiController]
@@ -12,14 +12,14 @@ namespace WebAPI.Controllers;
 public class UserController
 {
    
-    private readonly IBrugerLogic brugerLogic;
+   private readonly IBrugerLogic brugerLogic;
 
-        public UserController(IBrugerLogic brugerLogic)
+       public UserController(IBrugerLogic brugerLogic)
         {
             this.brugerLogic = brugerLogic;
         }
         
-        
+ 
         [HttpPost]
         public async Task<ActionResult<BrugerResponse>> CreateAsync()
         {
@@ -39,5 +39,5 @@ public class UserController
         }
         
     }
-    
+    */
     
