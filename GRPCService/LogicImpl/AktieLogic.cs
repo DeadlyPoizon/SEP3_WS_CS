@@ -40,9 +40,16 @@ public class AktieLogic : IAktieLogic
         return response;
     }
 
-    public Task<AktieResponse> updateAktie(Aktie[] aktie)
+    public async Task<List<AktieResponse>> updateAktie(Aktie[] aktie)
     {
-        throw new NotImplementedException();
+        List<AktieResponse> responses = new List<AktieResponse>();
+
+        for (int i = 0; i >= aktie.Length; i++)
+        {
+           responses[i] = await updateAktie(aktie[i]);
+        }
+
+        return responses;
     }
 
     public Task<AktieResponse> deleteAktie(Aktie aktie)

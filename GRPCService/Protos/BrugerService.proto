@@ -30,7 +30,8 @@ message Aktie{
 message AktieRequest{
   repeated Aktie aktie = 1;
   string param = 2;
-  int32 antal = 3;
+  int32 depotID = 3;
+  int32 antal = 4;
 }
 
 message AktieName{
