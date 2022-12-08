@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
+using Domain.DTOs;
 using Domain.Models;
 using GRPCService.LogicInterfaces;
 
@@ -72,15 +73,16 @@ public class JWTAuthService : IAuthService
         {
             throw new Exception("Password mismatch");
         }
-
+        Console.WriteLine(existingUser.Username);
         return existingUser;
+        
     }
     
 
 
     public async Task LoginAsync(string username, string password)
     {
-        Bruger userLoginDto = new()
+        UserLoginDTO userLoginDto = new()
         {
             Username = username,
             Password = password

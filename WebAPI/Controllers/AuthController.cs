@@ -1,7 +1,9 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Domain.DTOs;
 using Domain.Models;
+using GRPCService.LogicImpl;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using SydnetBlazor.Services;
@@ -14,12 +16,11 @@ namespace WebAPI.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IConfiguration config;
-    private readonly IAuthService authService;
+    private readonly IAuthService authService = new JWTAuthService(new BrugerLogic());
 
-    public AuthController(IConfiguration config, IAuthService authService)
+    public AuthController(IConfiguration config)
     {
         this.config = config;
-        this.authService = authService;
     }
     
     private List<Claim> GenerateClaims(Bruger user)
@@ -59,7 +60,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost, Route("login")]
-    public async Task<ActionResult> Login([FromBody] Bruger userLoginDto)
+    public async Task<ActionResult> Login([FromBody] UserLoginDTO userLoginDto)
     {
         try
         {
