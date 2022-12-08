@@ -2,6 +2,7 @@
 
 @using SydnetBlazor.Data
 
+<AuthorizeView>
 <body>
 <h3>Mit Portefølje</h3>
 <Row>
@@ -34,7 +35,7 @@
             <DataGridColumn Field="@nameof(TempAktie.PriceLow)" Caption="Nuværende Pris" Editable="false" Filterable="false"></DataGridColumn>
             <DataGridColumn Filterable="false" Caption="Profit / Loss"></DataGridColumn>
             <DataGridColumn Filterable="false">
-                <DisplayTemplate>
+                <DisplayTemplate Context="john">
                     <Button Color="Color.Success" Clicked="@(() => ShowModal())">
                         Sælg
                     </Button>
@@ -50,7 +51,7 @@
 </Row>
 
 </body>
-
+</AuthorizeView>
 
 <Modal @bind-Visible="@modalVisible">
     <ModalContent Centered>

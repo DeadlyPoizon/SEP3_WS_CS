@@ -1,9 +1,11 @@
 ﻿@page "/Aktier"
+@attribute [Authorize]
 @using SydnetBlazor.Data
 @using Domain.Models
 @using Domain.Models
 @using HttpClients.ClientInterfaces
 @inject IAktieService AktieService
+
 
 <body>
 

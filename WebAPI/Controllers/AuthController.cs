@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Domain.DTOs;
 using Domain.Models;
@@ -16,7 +17,7 @@ namespace WebAPI.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IConfiguration config;
-    private readonly IAuthService authService = new JWTAuthService(new BrugerLogic());
+    private readonly IAuthService authService = new JWTAuthService();
 
     public AuthController(IConfiguration config)
     {
@@ -58,13 +59,28 @@ public class AuthController : ControllerBase
         return serializedToken;
         
     }
+    
+    static string Hasher(string input)
+    {
+        using (SHA256 sha256 = SHA256.Create())
+        {
+            byte[] temp = sha256.ComputeHash(Encoding.UTF8.GetBytes(input));
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < temp.Length; i++)
+            {
+                builder.Append(temp[i].ToString("x2"));
+            }
+
+            return builder.ToString();
+        }
+    }
 
     [HttpPost, Route("login")]
     public async Task<ActionResult> Login([FromBody] UserLoginDTO userLoginDto)
     {
         try
         {
-            Bruger user = await authService.ValidateUser(userLoginDto.Username, userLoginDto.Password);
+            Bruger user = await authService.ValidateUser(userLoginDto.Username, Hasher(userLoginDto.Password));
             string token = GenerateJwt(user);
     
             return Ok(token);

@@ -1,4 +1,6 @@
-﻿<Bar Mode="BarMode.VerticalInline"
+﻿
+
+<Bar Mode="BarMode.VerticalInline"
      CollapseMode="BarCollapseMode.Small"
      Breakpoint="Breakpoint.Desktop"
      NavigationBreakpoint="Breakpoint.Tablet"
@@ -6,6 +8,7 @@
     <BarBrand Style="@logoTopBrand">
         <a href="/" style="@logoTop"><img class="logo" src="Sydnet_Logo.png"/></a>
     </BarBrand>
+    <AuthorizeView>
     <BarMenu>
         <BarStart>
             <BarItem>
@@ -15,11 +18,11 @@
                 </BarLink>
             </BarItem>
             <BarItem Disabled>
-                            <BarLink disabled="true">
-                                <BarIcon IconName="IconName.Seedling" />
-                                Rangliste
-                            </BarLink>
-                        </BarItem>
+                <BarLink disabled="true">
+                    <BarIcon IconName="IconName.Seedling" />
+                    Rangliste
+                </BarLink>
+            </BarItem>
             <BarItem>
                 <BarDropdown>
                     <BarDropdownToggle>
@@ -36,6 +39,7 @@
             </BarItem>
         </BarStart>
     </BarMenu>
+    </AuthorizeView>
 </Bar>
 
 @code {

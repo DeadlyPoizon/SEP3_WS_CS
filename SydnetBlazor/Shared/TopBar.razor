@@ -1,14 +1,34 @@
-﻿<Bar Breakpoint="Breakpoint.Desktop"
+﻿@using SydnetBlazor.Services
+@using SydnetBlazor.Services
+@using GRPCService.LogicInterfaces
+@using Domain.Models
+@using System.Security.Claims
+@using Domain.DTOs
+@using HttpClients.ClientInterfaces
+@inject IAuthService authService
+@inject IBrugerLogic brugerLogic
+@inject NavigationManager navMgr
+@inject IUserService userService;
+
+
+<Bar Breakpoint="Breakpoint.Desktop"
      Background="Background.Light"
      ThemeContrast="ThemeContrast.Light">
     <BarMenu>
         <BarStart>
         </BarStart>
         <BarEnd>
-            <BarItem>
-                <Button Color="Color.Primary" onclick="@ShowModal">Sign up</Button>
-                <Button Color="Color.Secondary" onclick="@ShowModal2">Log in</Button>
-            </BarItem>
+            <AuthorizeView>
+                <Authorized>
+                <FieldLabel>@context.User.Identity!.Name</FieldLabel>
+                </Authorized>
+                <NotAuthorized>
+                    <BarItem>
+                        <Button Color="Color.Primary" onclick="@ShowModal">Sign up</Button>
+                        <Button Color="Color.Secondary" onclick="@ShowModal2">Log in</Button>
+                    </BarItem>
+                </NotAuthorized>
+            </AuthorizeView>
         </BarEnd>
     </BarMenu>
 </Bar>
@@ -22,7 +42,7 @@
         <ModalBody>
             <Field>
                 <FieldLabel>Username</FieldLabel>
-                <TextEdit MaxLength="25" Placeholder="Username">
+                <TextEdit @bind-Text="userName" MaxLength="25" Placeholder="Username">
                     <Feedback>
                         <ValidationError>Brugeren eksisterer ikke</ValidationError>
                             </Feedback>
@@ -30,7 +50,7 @@
             </Field>
             <Field>
                 <FieldLabel>Password</FieldLabel>
-                <TextEdit Role="TextRole.Password" Placeholder="Password">
+                <TextEdit @bind-Text="password" Role="TextRole.Password" Placeholder="Password">
                     <Feedback>
                         <ValidationError>Forkert password!</ValidationError>
                         </Feedback>
@@ -39,7 +59,7 @@
         </ModalBody>
         <ModalFooter>
             <Button Color="Color.Secondary" Clicked="@HideModal2">Luk</Button>
-            <Button Color="Color.Primary" Clicked="@HideModal2">Login</Button>
+            <Button Color="Color.Primary" Clicked="@LoginAsync">Login</Button>
         </ModalFooter>
     </ModalContent>
 </Modal>
@@ -54,7 +74,7 @@
         <ModalBody>
             <Field>
                 <FieldLabel>Username</FieldLabel>
-                <TextEdit MaxLength="25" Placeholder="Username">
+                <TextEdit @bind-Text="userName" MaxLength="25" Placeholder="Username">
                     <Feedback>
                         <ValidationSuccess>Name is good.</ValidationSuccess>
                         <ValidationError>Enter valid name!</ValidationError>
@@ -63,16 +83,72 @@
             </Field>
             <Field>
                 <FieldLabel>Password</FieldLabel>
-                <TextEdit Role="TextRole.Password" Placeholder="Password" />
+                <TextEdit @bind-Text="password" Role="TextRole.Password" Placeholder="Password" />
             </Field>
         </ModalBody>
         <ModalFooter>
             <Button Color="Color.Secondary" Clicked="@HideModal">Luk</Button>
-            <Button Color="Color.Primary" Clicked="@HideModal">Opret Bruger</Button>
+            <Button Color="Color.Primary" Clicked="@RegisterAsync">Opret Bruger</Button>
         </ModalFooter>
     </ModalContent>
 </Modal>
 @code{
+    
+    private string userName;
+    private string password;
+    private string errorLabel;
+    private string color = "";
+    
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;
+
+    public string? name = "";
+    private IEnumerable<Claim>? userClaims;
+    
+
+   
+
+    private async Task LoginAsync()
+    {
+        errorLabel = "";
+        try
+        {
+            await authService.LoginAsync(userName, password);
+            navMgr.NavigateTo("/");
+            AuthenticationState authState = await AuthState;
+            ClaimsPrincipal user = authState.User;
+
+            userClaims = user.Claims;
+            name = user.Identity!.Name!;
+            HideModal2();
+            
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            errorLabel = $"Error: {e.Message}";
+        }
+    }
+    
+    private async Task RegisterAsync()
+    {
+        errorLabel = "";
+        try
+        {
+            await userService.Create(new Bruger(userName,password));
+            navMgr.NavigateTo("/Portfolio");
+            HideModal();
+            userName = "";
+            password = "";
+            errorLabel = "User successfully created";
+            color = "green";
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            errorLabel = $"Error: {e.Message}";
+        }
+    }
     private Modal registerModal;
     private Modal loginModal;
 
