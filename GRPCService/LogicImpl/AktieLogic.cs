@@ -63,7 +63,9 @@ public class AktieLogic : IAktieLogic
         
         AktieName aktieName = new AktieName()
         {
-            Name = name
+            Name = name,
+            
+            
         };
 
         GRPC.Bruger.Aktie grpcAktie = await client.getAktieAsync(aktieName);
