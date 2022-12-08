@@ -5,7 +5,7 @@ namespace GRPCService.LogicInterfaces;
 
 public interface IBrugerLogic
 {
-    Task<BrugerResponse> CreateBruger();
+   Task<BrugerResponse> CreateBruger(Bruger bruger);
 
     Task<Bruger> GetBruger(String username);
 
