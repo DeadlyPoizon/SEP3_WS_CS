@@ -126,4 +126,18 @@ public class AktieLogic : IAktieLogic
         return response;
 
     }
+
+    public async Task<AktieResponse> resetBruger(int depotid)
+    {
+        var client = new BrugerService.BrugerServiceClient(GrpcChannel.ForAddress("http://localhost:1337"));
+        AktieRequest aktieRequest = new AktieRequest()
+        {
+            Param = "reset",
+            DepotID = depotid
+        };
+
+        AktieResponse response = await client.handleAktieAsync(aktieRequest);
+
+        return response;
+    }
 }

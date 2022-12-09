@@ -54,5 +54,5 @@ GRPC.Bruger.Aktie aktie = new GRPC.Bruger.Aktie()
 };
 //AktieResponse aktieResponse = await aktieLogic.updateAktie(aktie);
 
-AktieResponse response = await aktieLogic.buyAktie(5, 7, aktie);
+AktieResponse response = await aktieLogic.resetBruger(7);
 Console.WriteLine(response.Response);

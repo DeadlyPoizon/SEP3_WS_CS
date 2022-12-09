@@ -49,4 +49,5 @@ public class BrugerLogic : IBrugerLogic
         return returnBruger;
     }
     
+    
 }
