@@ -20,7 +20,14 @@
         <BarEnd>
             <AuthorizeView>
                 <Authorized>
-                <FieldLabel>@context.User.Identity!.Name</FieldLabel>
+                <BarItem>
+                                        <BarDropdown>
+                                            <BarDropdownToggle>@context.User.Identity!.Name</BarDropdownToggle>
+                                            <BarDropdownMenu>
+                                                <BarDropdownItem Clicked="@LogoutAsync">Logout</BarDropdownItem>
+                                            </BarDropdownMenu>
+                                        </BarDropdown>
+                                        </BarItem>
                 </Authorized>
                 <NotAuthorized>
                     <BarItem>
@@ -178,5 +185,10 @@
         loginModal.Hide();
 
         return Task.CompletedTask;
+    }
+    
+    private async Task LogoutAsync()
+    {
+    // Ikke impl
     }
 }

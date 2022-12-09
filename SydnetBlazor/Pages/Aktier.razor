@@ -56,7 +56,7 @@
         </ModalBody>
         <ModalFooter>
             <Button Color="Color.Secondary" Clicked="@HideModal">Luk</Button>
-            <Button Color="Color.Success" Clicked="@HideModal">Køb</Button>
+            <Button Color="Color.Success" Clicked="@buyAktie">Køb</Button>
         </ModalFooter>
     </ModalContent>
 </Modal>
@@ -81,6 +81,21 @@
             Console.WriteLine(e);
             msg = e.Message;
         }
+    }
+
+    private void buyAktie()
+    {
+        GRPC.Bruger.Aktie aktie = new GRPC.Bruger.Aktie()
+        {
+            Firma = selectedAktie.Firma,
+            High = selectedAktie.High,
+            Low = selectedAktie.Low,
+            Navn = selectedAktie.Navn,
+            Pris = selectedAktie.Pris
+         
+        };
+        AktieService.buyAktie(AktieAntal, 6,aktie);
+        Console.WriteLine("done");
     }
 
 

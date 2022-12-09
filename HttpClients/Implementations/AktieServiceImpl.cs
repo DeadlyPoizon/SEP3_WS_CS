@@ -1,6 +1,8 @@
-﻿using System.Text.Json;
-using Domain.Models;
+﻿using System.Net.Http.Json;
+using System.Text.Json;
+using GRPC.Bruger;
 using HttpClients.ClientInterfaces;
+using Aktie = Domain.Models.Aktie;
 
 namespace HttpClients.Implementations;
 
@@ -8,6 +10,11 @@ public class AktieServiceImpl : IAktieService
 {
     
     private readonly HttpClient client;
+
+    public AktieServiceImpl(HttpClient client)
+    {
+        this.client = client;
+    }
    
 
    
@@ -35,8 +42,8 @@ public class AktieServiceImpl : IAktieService
 
     public async Task<List<Aktie>> GetAllAktier()
     {
-        string uri = "/Aktie";
-        HttpResponseMessage response = await client.GetAsync(uri);
+    
+        HttpResponseMessage response = await client.GetAsync("/Aktie");
         string result = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
         {
@@ -49,5 +56,16 @@ public class AktieServiceImpl : IAktieService
         })!;
         
         return aktier;
+    }
+
+    public async Task buyAktie(int antal, int depotID, GRPC.Bruger.Aktie aktie)
+    {
+        HttpResponseMessage response = await client.PostAsJsonAsync("/Aktie",aktie);
+        string result = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(result);
+        }
+
     }
 }
