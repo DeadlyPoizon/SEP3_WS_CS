@@ -1,20 +1,19 @@
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
+using Domain.DTOs;
 using Domain.Models;
+using GRPCService.LogicImpl;
 using GRPCService.LogicInterfaces;
 
 namespace SydnetBlazor.Services;
 
 public class JWTAuthService : IAuthService
 {
-    private readonly IBrugerLogic brugerLogic;
+    private readonly IBrugerLogic brugerLogic = new BrugerLogic();
     private readonly HttpClient client = new ();
 
-    public JWTAuthService(IBrugerLogic brugerLogic)
-    {
-        this.brugerLogic = brugerLogic;
-    }
+    
 
     // this private variable for simple caching
     public static string? Jwt { get; private set; } = "";
@@ -72,15 +71,16 @@ public class JWTAuthService : IAuthService
         {
             throw new Exception("Password mismatch");
         }
-
+        Console.WriteLine(existingUser.Username);
         return existingUser;
+        
     }
     
 
 
     public async Task LoginAsync(string username, string password)
     {
-        Bruger userLoginDto = new()
+        UserLoginDTO userLoginDto = new()
         {
             Username = username,
             Password = password

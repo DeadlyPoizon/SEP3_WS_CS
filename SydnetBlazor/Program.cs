@@ -1,6 +1,8 @@
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
+using GRPCService.LogicImpl;
+using GRPCService.LogicInterfaces;
 using HttpClients.ClientInterfaces;
 using HttpClients.Implementations;
 using Microsoft.AspNetCore.Components;
@@ -33,6 +35,8 @@ builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<IAktieService, AktieServiceImpl>();
 builder.Services.AddScoped<IAuthService, JWTAuthService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthProvider>();
+builder.Services.AddScoped<IBrugerLogic, BrugerLogic>();
+builder.Services.AddScoped<IUserService, UserServiceImpl>();
 
 var app = builder.Build();
 
