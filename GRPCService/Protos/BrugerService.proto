@@ -56,4 +56,5 @@ service BrugerService{
   rpc loginBruger(BrugerRequest) returns (BrugerResponse);
   rpc getAktie(AktieName) returns (Aktie); 
   rpc getAll(getAllAktier) returns (allAktier);
+  rpc handleBruger(BrugerRequest) returns (BrugerResponse);
 }

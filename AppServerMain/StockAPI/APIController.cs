@@ -25,13 +25,27 @@ public class APIController
         path = path.Replace('\\', '/');
         path += "/stocks.json";
         FilePath = path;
+
+        Dictionary<string, string> stocks = initDictionary();
+        updateStocks(stocks);
    }
 
    public void updateStocks(string symbol)
    {
+      double[] temp = getStockprices(symbol);
+      
       
    }
-   
+
+   public void updateStocks(Dictionary<string, string> symbols)
+   {
+      List<string> keys = new List<string>(symbols.Keys);
+      
+      for (int i = 0; i < keys.Count; i++)
+      {
+         updateStocks(keys[i]);
+      }
+   }
 
    public double[] getStockprices(string SYMBOL)
    {
@@ -72,8 +86,7 @@ public class APIController
             if (match.Success)
             {
                double tempdouble = double.Parse(match.Value);
-               tempdouble = tempdouble / 10000;
-               numbers[i] = tempdouble;
+               numbers[i] = tempdouble / 10000;
             }
          }
 
