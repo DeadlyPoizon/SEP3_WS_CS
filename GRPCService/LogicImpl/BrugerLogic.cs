@@ -7,9 +7,7 @@ namespace GRPCService.LogicImpl;
 
 public class BrugerLogic : IBrugerLogic
 {
-
-
-
+    
     public async Task<BrugerResponse> CreateBruger(Domain.Models.Bruger bruger)
     {
         var client = new BrugerService.BrugerServiceClient(GrpcChannel.ForAddress("http://localhost:1337"));

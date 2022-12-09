@@ -9,4 +9,5 @@ public interface IAktieLogic
     Task<List<AktieResponse>> updateAktie(Aktie[] aktie);
     Task<AktieResponse> deleteAktie(Aktie aktie);
     Task<Aktie> getAktie(String name);
+    Task<List<Aktie>> getAllAktier();
 }

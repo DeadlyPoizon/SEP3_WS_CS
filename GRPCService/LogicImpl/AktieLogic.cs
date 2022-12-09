@@ -2,6 +2,7 @@
 using GRPC.Bruger;
 using Grpc.Net.Client;
 using GRPCService.LogicInterfaces;
+using Newtonsoft.Json;
 using Aktie = Domain.Models.Aktie;
 
 namespace GRPCService.LogicImpl;
@@ -78,5 +79,33 @@ public class AktieLogic : IAktieLogic
             Pris = grpcAktie.Pris
         };
         return aktie;
+    }
+
+    public async Task<List<Aktie>> getAllAktier()
+    {
+        List<Aktie> aktier;
+
+        var client = new BrugerService.BrugerServiceClient(GrpcChannel.ForAddress("http://localhost:1337"));
+        getAllAktier getAllAktier = new getAllAktier()
+        {
+            Param = "get"
+        };
+        allAktier allAktier = await client.getAllAsync(getAllAktier);
+        List<GRPC.Bruger.Aktie>? tempGRPC = JsonConvert.DeserializeObject<List<GRPC.Bruger.Aktie>>(allAktier.Aktier.ToString());
+
+        aktier = new List<Aktie>(tempGRPC.Count);
+        for (int i = 0; i < tempGRPC.Count; i++)
+        {
+            Aktie tempaktie = new Aktie()
+            {
+                Navn = tempGRPC[i].Navn,
+                Firma = tempGRPC[i].Firma,
+                Pris = tempGRPC[i].Pris,
+                High = tempGRPC[i].High,
+                Low = tempGRPC[i].Low,
+            };
+            aktier.Add(tempaktie);
+        }
+        return aktier;
     }
 }

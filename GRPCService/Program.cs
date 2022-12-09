@@ -50,5 +50,7 @@ Aktie aktie = new Aktie()
     High = 4269,
     Low = 1337
 };
-AktieResponse aktieResponse = await aktieLogic.updateAktie(aktie);
-Console.WriteLine(aktieResponse.Response);
+//AktieResponse aktieResponse = await aktieLogic.updateAktie(aktie);
+
+List<Aktie> aktier = await aktieLogic.getAllAktier();
+
