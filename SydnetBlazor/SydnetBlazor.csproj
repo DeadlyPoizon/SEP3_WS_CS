@@ -17,4 +17,12 @@
       <ProjectReference Include="..\HttpClients\HttpClients.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Data\WeatherForecastService.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="Pages\FetchData.razor" />
+    </ItemGroup>
+
 </Project>

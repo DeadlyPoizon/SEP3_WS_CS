@@ -17,14 +17,14 @@ public class AktieController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Aktie>>> GetAsync([FromQuery] string? navn)
+    public async Task<ActionResult<List<Aktie>>> GetAsync()
     {
         try
         {
 
-            Aktie aktie = await aktieLogic.getAktie(navn);
+            List<Aktie> aktier = await aktieLogic.getAllAktier();
                 
-            return Ok(aktie);
+            return Ok(aktier);
         }
         catch (Exception e)
         {

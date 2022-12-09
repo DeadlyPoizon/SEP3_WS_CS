@@ -9,4 +9,6 @@ public interface IBrugerLogic
 
     Task<Bruger> GetBruger(String username);
 
+    Task<AktieResponse> resetBruger(int depotid);
+
 }

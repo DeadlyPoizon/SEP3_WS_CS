@@ -1,8 +1,10 @@
+using Domain.Models;
 using GRPC.Bruger;
 using Grpc.Net.Client;
 using Grpc.Core;
 using GRPCService.LogicImpl;
 using Aktie = Domain.Models.Aktie;
+using Bruger = GRPC.Bruger.Bruger;
 
 
 using var channel = GrpcChannel.ForAddress("http://localhost:1337");
@@ -41,8 +43,8 @@ async Task<Bruger> getBruger()
 //Console.WriteLine(response.Response);
 //Bruger bruger = await getBruger();
 //Console.WriteLine(bruger.DepotID);
-AktieLogic aktieLogic = new AktieLogic();
-Aktie aktie = new Aktie()
+BrugerLogic logic = new BrugerLogic();
+GRPC.Bruger.Aktie aktie = new GRPC.Bruger.Aktie()
 {
     Navn = "TSLA",
     Firma = "Tesla",
@@ -52,5 +54,5 @@ Aktie aktie = new Aktie()
 };
 //AktieResponse aktieResponse = await aktieLogic.updateAktie(aktie);
 
-List<Aktie> aktier = await aktieLogic.getAllAktier();
-
+AktieResponse response = await logic.resetBruger(1);
+Console.WriteLine(response.Response);

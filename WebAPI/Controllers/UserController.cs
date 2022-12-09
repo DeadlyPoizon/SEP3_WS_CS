@@ -53,6 +53,21 @@ public class UserController : ControllerBase
             }
         }
         
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> DeleteAsync([FromRoute] int id)
+        {
+            try
+            {
+                await brugerLogic.resetBruger(id);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(500, e.Message);
+            }
+        }
+        
    
     }
     

@@ -32,4 +32,22 @@ public class AktieServiceImpl : IAktieService
         })!;
         return aktier;
     }
+
+    public async Task<List<Aktie>> GetAllAktier()
+    {
+        string uri = "/Aktie";
+        HttpResponseMessage response = await client.GetAsync(uri);
+        string result = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(result);
+        }
+
+        List<Aktie> aktier = JsonSerializer.Deserialize<List<Aktie>>(result, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        })!;
+        
+        return aktier;
+    }
 }
