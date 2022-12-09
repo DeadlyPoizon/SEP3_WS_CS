@@ -49,18 +49,24 @@ public class BrugerLogic : IBrugerLogic
         return returnBruger;
     }
     
-    public async Task<AktieResponse> resetBruger(int depotid)
+    public async Task<BrugerResponse> resetBruger(int depotid)
     {
         var client = new BrugerService.BrugerServiceClient(GrpcChannel.ForAddress("http://localhost:1337"));
-        AktieRequest aktieRequest = new AktieRequest()
+        Bruger bruger = new Bruger()
         {
-            Param = "reset",
             DepotID = depotid
         };
 
-        AktieResponse response = await client.handleAktieAsync(aktieRequest);
+        BrugerRequest request = new BrugerRequest()
+        {
+            Bruger = { bruger },
+            Param = "reset",
+        };
+
+        BrugerResponse response = await client.handleBrugerAsync(request);
 
         return response;
+
     }
     
     
