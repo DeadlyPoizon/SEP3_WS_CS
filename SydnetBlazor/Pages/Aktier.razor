@@ -3,8 +3,11 @@
 @using SydnetBlazor.Data
 @using Domain.Models
 @using Domain.Models
+@using GRPCService.LogicInterfaces
 @using HttpClients.ClientInterfaces
 @inject IAktieService AktieService
+
+
 
 
 <body>
@@ -60,8 +63,8 @@
 
 
 @code{
-    
-    private IEnumerable<Aktie>? aktier;
+
+    private List<Aktie>? aktier;
     private string msg = "";
 
     protected override async Task OnInitializedAsync()
@@ -69,7 +72,9 @@
         msg = "";
         try
         {
-            aktier = await AktieService.Getaktie();
+           
+            aktier = await AktieService.GetAllAktier();
+            Console.WriteLine(aktier.Count);
         }
         catch (Exception e)
         {

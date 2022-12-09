@@ -7,4 +7,6 @@ public interface IAktieService
     
 
     Task<IEnumerable<Aktie>> Getaktie(string? aktie = null);
+    
+    Task<List<Aktie>> GetAllAktier();
 }

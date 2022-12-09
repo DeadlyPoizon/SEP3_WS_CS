@@ -29,4 +29,9 @@ public class UserServiceImpl : IUserService
         return create;
     
     }
+
+    public Task resetBruger(string depotID)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -31,7 +31,6 @@ builder.Services.AddScoped(
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<IAktieService, AktieServiceImpl>();
 builder.Services.AddScoped<IAuthService, JWTAuthService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthProvider>();

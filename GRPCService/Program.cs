@@ -43,7 +43,7 @@ async Task<Bruger> getBruger()
 //Console.WriteLine(response.Response);
 //Bruger bruger = await getBruger();
 //Console.WriteLine(bruger.DepotID);
-AktieLogic aktieLogic = new AktieLogic();
+BrugerLogic logic = new BrugerLogic();
 GRPC.Bruger.Aktie aktie = new GRPC.Bruger.Aktie()
 {
     Navn = "TSLA",
@@ -54,5 +54,5 @@ GRPC.Bruger.Aktie aktie = new GRPC.Bruger.Aktie()
 };
 //AktieResponse aktieResponse = await aktieLogic.updateAktie(aktie);
 
-AktieResponse response = await aktieLogic.resetBruger(7);
+AktieResponse response = await logic.resetBruger(1);
 Console.WriteLine(response.Response);
