@@ -20,7 +20,14 @@
         <BarEnd>
             <AuthorizeView>
                 <Authorized>
-                <FieldLabel>@context.User.Identity!.Name</FieldLabel>
+                    <BarItem>
+                        <BarDropdown>
+                            <BarDropdownToggle>@context.User.Identity!.Name</BarDropdownToggle>
+                            <BarDropdownMenu>
+                                <BarDropdownItem Clicked="@LogoutAsync">Logout</BarDropdownItem>
+                            </BarDropdownMenu>
+                        </BarDropdown>
+                        </BarItem>
                 </Authorized>
                 <NotAuthorized>
                     <BarItem>
@@ -98,7 +105,7 @@
     private string password;
     private string errorLabel;
     private string color = "";
-    
+
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = null!;
 
@@ -129,6 +136,14 @@
             errorLabel = $"Error: {e.Message}";
         }
     }
+    
+    private async Task LogoutAsync()
+    {
+        // Ikke impl
+    }
+    
+    
+    
     
     private async Task RegisterAsync()
     {

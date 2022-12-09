@@ -1,4 +1,5 @@
-﻿
+﻿@using System.Security.Claims
+
 
 <Bar Mode="BarMode.VerticalInline"
      CollapseMode="BarCollapseMode.Small"
@@ -30,7 +31,7 @@
                         Min Profil
                     </BarDropdownToggle>
                     <BarDropdownMenu>
-                        <BarDropdownItem><BarIcon IconName="IconName.Wallet"/>0 DKK</BarDropdownItem>
+                        <BarDropdownItem><BarIcon IconName="IconName.Wallet"/>DKK</BarDropdownItem>
                         <BarLink To="Portfolio"><BarDropdownItem><BarIcon IconName="IconName.Briefcase"/>Portefølje</BarDropdownItem></BarLink>
                         <BarLink To="Transactions"><BarDropdownItem><BarIcon IconName="IconName.Book"/>Transaktioner</BarDropdownItem></BarLink>
                         <BarLink To="Settings"><BarDropdownItem><BarIcon IconName="IconName.Wrench"/>Indstillinger</BarDropdownItem></BarLink>
