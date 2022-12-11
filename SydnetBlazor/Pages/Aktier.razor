@@ -5,7 +5,10 @@
 @using Domain.Models
 @using GRPCService.LogicInterfaces
 @using HttpClients.ClientInterfaces
+@using System.Security.Claims
 @inject IAktieService AktieService
+@inject IBrugerLogic brugerLogic
+
 
 
 
@@ -66,15 +69,25 @@
 
     private List<Aktie>? aktier;
     private string msg = "";
+    
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;
+    public string? name = "";
+    private IEnumerable<Claim>? userClaims;
 
     protected override async Task OnInitializedAsync()
     {
         msg = "";
         try
         {
-           
+            AuthenticationState authState = await AuthState;
+            ClaimsPrincipal user = authState.User;
+
+            userClaims = user.Claims;
+            name = user.Identity!.Name!;
             aktier = await AktieService.GetAllAktier();
-            Console.WriteLine(aktier.Count);
+            
+            
         }
         catch (Exception e)
         {
@@ -85,6 +98,7 @@
 
     private void buyAktie()
     {
+        
         GRPC.Bruger.Aktie aktie = new GRPC.Bruger.Aktie()
         {
             Firma = selectedAktie.Firma,
@@ -94,8 +108,17 @@
             Pris = selectedAktie.Pris
          
         };
-        AktieService.buyAktie(AktieAntal, 6,aktie);
-        Console.WriteLine("done");
+        
+        
+        Console.WriteLine(AktieAntal);
+        int depotID = brugerLogic.GetBruger(name).Result.DepotID;
+        Console.WriteLine(depotID);
+        Console.WriteLine(selectedAktie.Firma);
+        Console.WriteLine(selectedAktie.High);
+        Console.WriteLine(selectedAktie.Low);
+        Console.WriteLine(selectedAktie.Navn);
+        Console.WriteLine(selectedAktie.Pris);
+        AktieService.buyAktie(AktieAntal, depotID,aktie);
     }
 
 
