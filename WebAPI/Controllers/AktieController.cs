@@ -3,6 +3,7 @@ using GRPC.Bruger;
 using GRPCService.LogicInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using Aktie = Domain.Models.Aktie;
+using Depot = Domain.Models.Depot;
 
 namespace WebAPI.Controllers;
 
@@ -18,8 +19,8 @@ public class AktieController : ControllerBase
         this.aktieLogic = aktieLogic;
     }
     
-    [HttpGet]
-    public async Task<ActionResult<List<Aktie>>> GetAsync()
+    [HttpGet("all")]
+    public async Task<ActionResult<List<Aktie>>> GetAktierAsync()
     {
         try
         {
@@ -35,6 +36,22 @@ public class AktieController : ControllerBase
         }
     }
     
+    [HttpGet("depot")]
+    public async Task<ActionResult<List<Aktie>>> GetDepotAsync(int depotID)
+    {
+        try
+        {
+
+            List<Depot> aktier = await aktieLogic.getAllAktierFromDepot(depotID);
+                
+            return Ok(aktier);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
     [HttpPost("buy")]
     public async Task<ActionResult<AktieResponse>> CreateAsync([FromBody]AktieRequestDTO requestDto)
     {

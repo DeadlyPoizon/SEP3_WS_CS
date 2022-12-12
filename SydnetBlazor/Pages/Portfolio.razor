@@ -36,10 +36,8 @@
     <Column ColumnSize="ColumnSize.Is8">
         <DataGrid TItem="Depot" Data="@aktier" @bind-SelectedRow="@selectedAktie" Filterable Responsive>
             <DataGridColumn Field="@nameof(Depot.AktieNavn)" Caption="Firma" Editable="false"></DataGridColumn>
-            <DataGridColumn Field="@nameof(Depot.ID)" Caption="Forkortelse" Editable="false" Filterable="false"></DataGridColumn>
-            <DataGridColumn Field="@nameof(Aktie.Pris)" Caption="Købspris" Editable="false" Filterable="false"></DataGridColumn>
-            <DataGridColumn Field="@nameof(Aktie.High)" Caption="Antal" Editable="false" Filterable="false"></DataGridColumn>
-            <DataGridColumn Field="@nameof(Aktie.Low)" Caption="Nuværende Pris" Editable="false" Filterable="false"></DataGridColumn>
+            <DataGridColumn Field="@nameof(Depot.Antal)" Caption="Antal" Editable="false" Filterable="false"></DataGridColumn>
+            <DataGridColumn Field="@nameof(Depot.købspris)" Caption="Købspris" Editable="false" Filterable="false"></DataGridColumn>
             <DataGridColumn Filterable="false" Caption="Profit / Loss"></DataGridColumn>
             <DataGridColumn Filterable="false">
                 <DisplayTemplate Context="john">
@@ -69,11 +67,11 @@
         <ModalBody>
             <Field>
                 <FieldLabel>Firma</FieldLabel>
-                <TextEdit Text="@selectedAktie.Firma" ReadOnly="true" />
+                <TextEdit Text="@selectedAktie.AktieNavn" ReadOnly="true" />
             </Field>
             <Field>
                 <FieldLabel>Pris</FieldLabel>
-                <TextEdit Text="@selectedAktie.Pris.ToString()" ReadOnly="true"/>
+                <TextEdit Text="@selectedAktie.købspris.ToString()" ReadOnly="true"/>
             </Field>
             
             <Field>
@@ -82,14 +80,14 @@
             </Field>
             
             <Field>
-                <FieldLabel>Ordre Pris</FieldLabel>
+                <FieldLabel>Samlet  Salgspris</FieldLabel>
                 <NumericEdit @bind-Value="AktieTotal" TValue="double" ReadOnly="true"/>
             </Field>
             
         </ModalBody>
         <ModalFooter>
             <Button Color="Color.Secondary" Clicked="@HideModal">Luk</Button>
-            <Button Color="Color.Success" Clicked="@HideModal">Sælg</Button>
+            <Button Color="Color.Success" Clicked="@sellAktie">Sælg</Button>
         </ModalFooter>
     </ModalContent>
 </Modal>
@@ -102,7 +100,7 @@
 
 <Alert Color="Color.Success" @bind-Visible="@successBuy">
     <AlertMessage>Succes!</AlertMessage>
-        <AlertDescription>Aktie købt!</AlertDescription>
+        <AlertDescription>Aktie Solgt!</AlertDescription>
     <CloseButton />
 </Alert>
 
@@ -111,7 +109,7 @@
     bool errorBuy = false;
     bool successBuy = false;
     private List<Depot>? aktier;
-    public Aktie? selectedAktie = new Aktie();
+    public Depot? selectedAktie = new Depot();
 
     public int AktieAntal = 0;
     public double AktieTotal = 0.00;
@@ -134,7 +132,7 @@
             userClaims = user.Claims;
             name = user.Identity!.Name!;
             int depotID = brugerLogic.GetBruger(name).Result.DepotID;
-            aktier = await aktieLogic.getAllAktierFromDepot(depotID);
+            aktier = await aktieService.GetDepot(depotID);
         }
         catch (Exception e)
         {
@@ -177,7 +175,7 @@
     
     private void updatePrice()
     {
-        AktieTotal = AktieAntal * selectedAktie.Pris;
+        AktieTotal = AktieAntal * selectedAktie.købspris;
     }
     
     
@@ -186,11 +184,11 @@
         
         Aktie aktie = new Aktie()
         {
-            Firma = selectedAktie.Firma,
-            High = selectedAktie.High,
-            Low = selectedAktie.Low,
-            Navn = selectedAktie.Navn,
-            Pris = selectedAktie.Pris
+            Firma = selectedAktie.AktieNavn,
+            High = selectedAktie.købspris,
+            Low = selectedAktie.købspris,
+            Navn = selectedAktie.AktieNavn,
+            Pris = selectedAktie.købspris
          
         };
         
@@ -201,7 +199,8 @@
 
 
         aktieService.sellAktie(AktieAntal, depotID, aktie);
-
+        
+        successBuy = true;
 
     }
 }

@@ -4,6 +4,7 @@ using Domain.DTOs;
 using GRPC.Bruger;
 using HttpClients.ClientInterfaces;
 using Aktie = Domain.Models.Aktie;
+using Depot = Domain.Models.Depot;
 
 namespace HttpClients.Implementations;
 
@@ -44,7 +45,7 @@ public class AktieServiceImpl : IAktieService
     public async Task<List<Aktie>> GetAllAktier()
     {
     
-        HttpResponseMessage response = await client.GetAsync("/Aktie");
+        HttpResponseMessage response = await client.GetAsync("/Aktie/all");
         string result = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
         {
@@ -52,6 +53,24 @@ public class AktieServiceImpl : IAktieService
         }
 
         List<Aktie> aktier = JsonSerializer.Deserialize<List<Aktie>>(result, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        })!;
+        
+        return aktier;
+    }
+    
+    public async Task<List<Depot>> GetDepot(int depotID)
+    {
+    
+        HttpResponseMessage response = await client.GetAsync($"/Aktie/depot?depotID={depotID}");
+        string result = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(result);
+        }
+
+        List<Depot> aktier = JsonSerializer.Deserialize<List<Depot>>(result, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         })!;
@@ -86,7 +105,7 @@ public class AktieServiceImpl : IAktieService
             antal = antal,
             depotID = depotID,
             aktie = aktie,
-            param = "buy"
+            param = "sell"
 
         };
             
