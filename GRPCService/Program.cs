@@ -44,7 +44,7 @@ async Task<Bruger> getBruger()
 //Bruger bruger = await getBruger();
 //Console.WriteLine(bruger.DepotID);
 BrugerLogic logic = new BrugerLogic();
-GRPC.Bruger.Aktie aktie = new GRPC.Bruger.Aktie()
+Aktie aktie = new Aktie()
 {
     Navn = "TSLA",
     Firma = "Tesla",
@@ -52,7 +52,7 @@ GRPC.Bruger.Aktie aktie = new GRPC.Bruger.Aktie()
     High = 4269,
     Low = 1337
 };
-//AktieResponse aktieResponse = await aktieLogic.updateAktie(aktie);
 
-BrugerResponse response = await logic.resetBruger(1);
+AktieLogic aktieLogic = new AktieLogic();
+AktieResponse response = await aktieLogic.sellAktie(1, 6, aktie);
 Console.WriteLine(response.Response);
