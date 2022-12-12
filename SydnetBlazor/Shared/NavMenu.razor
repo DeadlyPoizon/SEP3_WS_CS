@@ -1,4 +1,6 @@
 ﻿@using System.Security.Claims
+@using GRPCService.LogicInterfaces
+@inject IBrugerLogic brugerLogic
 
 
 <Bar Mode="BarMode.VerticalInline"
@@ -26,12 +28,12 @@
             </BarItem>
             <BarItem>
                 <BarDropdown>
-                    <BarDropdownToggle>
+                    <BarDropdownToggle Clicked="@john">
                         <BarIcon IconName="IconName.User"/>
                         Min Profil
                     </BarDropdownToggle>
                     <BarDropdownMenu>
-                        <BarDropdownItem><BarIcon IconName="IconName.Wallet"/>DKK</BarDropdownItem>
+                        <BarDropdownItem><BarIcon IconName="IconName.Wallet"/>@saldo DKK</BarDropdownItem>
                         <BarLink To="Portfolio"><BarDropdownItem><BarIcon IconName="IconName.Briefcase"/>Portefølje</BarDropdownItem></BarLink>
                         <BarLink To="Transactions"><BarDropdownItem><BarIcon IconName="IconName.Book"/>Transaktioner</BarDropdownItem></BarLink>
                         <BarLink To="Settings"><BarDropdownItem><BarIcon IconName="IconName.Wrench"/>Indstillinger</BarDropdownItem></BarLink>
@@ -46,4 +48,16 @@
 @code {
     string logoTop = $"height: 100px;";
     string logoTopBrand = $"height: 100px;";
+
+    private TopBar topBar;
+    private double saldo = 0;
+
+    private void john()
+    {
+        saldo = topBar.getSaldo();
+    }
+
+
 }
+    
+    

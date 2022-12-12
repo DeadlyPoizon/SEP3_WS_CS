@@ -20,14 +20,14 @@
         <BarEnd>
             <AuthorizeView>
                 <Authorized>
-                    <BarItem>
-                        <BarDropdown>
-                            <BarDropdownToggle>@context.User.Identity!.Name</BarDropdownToggle>
-                            <BarDropdownMenu>
-                                <BarDropdownItem Clicked="@LogoutAsync">Logout</BarDropdownItem>
-                            </BarDropdownMenu>
-                        </BarDropdown>
-                        </BarItem>
+                <BarItem>
+                                        <BarDropdown>
+                                            <BarDropdownToggle>@context.User.Identity!.Name</BarDropdownToggle>
+                                            <BarDropdownMenu>
+                                                <BarDropdownItem Clicked="@LogoutAsync">Logout</BarDropdownItem>
+                                            </BarDropdownMenu>
+                                        </BarDropdown>
+                                        </BarItem>
                 </Authorized>
                 <NotAuthorized>
                     <BarItem>
@@ -105,12 +105,13 @@
     private string password;
     private string errorLabel;
     private string color = "";
-
+    
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = null!;
 
     public string? name = "";
     private IEnumerable<Claim>? userClaims;
+    public double saldo = 0;
     
 
    
@@ -127,6 +128,7 @@
 
             userClaims = user.Claims;
             name = user.Identity!.Name!;
+            saldo = brugerLogic.GetBruger(name).Result.Saldo;
             HideModal2();
             
         }
@@ -136,14 +138,11 @@
             errorLabel = $"Error: {e.Message}";
         }
     }
-    
-    private async Task LogoutAsync()
+
+    public double getSaldo()
     {
-        // Ikke impl
+        return saldo;
     }
-    
-    
-    
     
     private async Task RegisterAsync()
     {
@@ -193,5 +192,10 @@
         loginModal.Hide();
 
         return Task.CompletedTask;
+    }
+    
+    private async Task LogoutAsync()
+    {
+    // Ikke impl
     }
 }

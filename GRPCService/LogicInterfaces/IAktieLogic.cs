@@ -10,4 +10,6 @@ public interface IAktieLogic
     Task<AktieResponse> deleteAktie(Aktie aktie);
     Task<Aktie> getAktie(String name);
     Task<List<Aktie>> getAllAktier();
+
+    Task<AktieResponse> buyAktie(int antal, int depotID, Aktie aktie);
 }

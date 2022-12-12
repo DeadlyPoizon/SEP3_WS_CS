@@ -1,5 +1,8 @@
 ﻿@page "/Transactions"
 @using SydnetBlazor.Data
+@using GRPCService.LogicInterfaces
+@using System.Security.Claims
+@inject IBrugerLogic brugerLogic
 
 <h3>Transaktioner</h3>
 
@@ -16,5 +19,36 @@
     
     private List<TempTransaktioner> aktieList = new() { new() { Firma = "Tesla", Forkortelse = "TSLA", PriceBought = 1000.5, Antal = 2, Dato = "05-12-2022 11:16:55"}, new() { Firma = "Tesla", Forkortelse = "TSLA", PriceBought = 1000.5, Antal = 2, Dato = "05-12-2022 11:16:55" } };
 
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;
+    public string? name = "";
+    private IEnumerable<Claim>? userClaims;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        
+        try
+        {
+            AuthenticationState authState = await AuthState;
+            ClaimsPrincipal user = authState.User;
 
+            userClaims = user.Claims;
+            name = user.Identity!.Name!;
+            getTransactions();
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            
+        }
+    }
+
+    private List<Transactions> getTransactions()
+    {
+
+        List<Transactions> transactionsList = new List<Transactions>();
+
+        return transactionsList;
+    }
 }
