@@ -99,7 +99,7 @@
     private void buyAktie()
     {
         
-        GRPC.Bruger.Aktie aktie = new GRPC.Bruger.Aktie()
+        Aktie aktie = new Aktie()
         {
             Firma = selectedAktie.Firma,
             High = selectedAktie.High,
@@ -110,15 +110,21 @@
         };
         
         
-        Console.WriteLine(AktieAntal);
+       
         int depotID = brugerLogic.GetBruger(name).Result.DepotID;
-        Console.WriteLine(depotID);
-        Console.WriteLine(selectedAktie.Firma);
-        Console.WriteLine(selectedAktie.High);
-        Console.WriteLine(selectedAktie.Low);
-        Console.WriteLine(selectedAktie.Navn);
-        Console.WriteLine(selectedAktie.Pris);
-        AktieService.buyAktie(AktieAntal, depotID,aktie);
+        double saldo = brugerLogic.GetBruger(name).Result.Saldo;
+
+        if (saldo<AktieTotal)
+        {
+            Console.WriteLine("bøs");
+        }
+        else if (saldo>=AktieTotal)
+        {
+            AktieService.buyAktie(AktieAntal, depotID,aktie);  
+        }
+       
+        
+     
     }
 
 

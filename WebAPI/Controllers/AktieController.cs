@@ -1,4 +1,5 @@
-﻿using GRPC.Bruger;
+﻿using Domain.DTOs;
+using GRPC.Bruger;
 using GRPCService.LogicInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using Aktie = Domain.Models.Aktie;
@@ -35,12 +36,13 @@ public class AktieController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<ActionResult<AktieResponse>> CreateAsync(int antal, int depotID, GRPC.Bruger.Aktie aktie)
+    public async Task<ActionResult<AktieResponse>> CreateAsync([FromBody]AktieRequestDTO requestDto)
     {
         try
         {
-            
-            AktieResponse aktiee = await aktieLogic.buyAktie(antal,depotID,aktie);
+
+            AktieResponse aktiee =
+                await aktieLogic.buyAktie(requestDto.antal, requestDto.depotID, requestDto.aktie);
             return Ok();
         }
         catch (Exception e)

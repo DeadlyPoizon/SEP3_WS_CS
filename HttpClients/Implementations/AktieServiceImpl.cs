@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
+using Domain.DTOs;
 using GRPC.Bruger;
 using HttpClients.ClientInterfaces;
 using Aktie = Domain.Models.Aktie;
@@ -58,9 +59,18 @@ public class AktieServiceImpl : IAktieService
         return aktier;
     }
 
-    public async Task buyAktie(int antal, int depotID, GRPC.Bruger.Aktie aktie)
+    public async Task buyAktie(int antal, int depotID, Aktie aktie)
     {
-        HttpResponseMessage response = await client.PostAsJsonAsync("/Aktie",aktie);
+        AktieRequestDTO requestDto = new AktieRequestDTO()
+        {
+            antal = antal,
+            depotID = depotID,
+            aktie = aktie,
+            param = "buy"
+
+        };
+            
+        HttpResponseMessage response = await client.PostAsJsonAsync("/Aktie",requestDto);
         string result = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
         {

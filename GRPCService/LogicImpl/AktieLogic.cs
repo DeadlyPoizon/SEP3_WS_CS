@@ -110,12 +110,20 @@ public class AktieLogic : IAktieLogic
     }
 
 
-    public async Task<AktieResponse> buyAktie(int antal, int depotID, GRPC.Bruger.Aktie aktie)
+    public async Task<AktieResponse> buyAktie(int antal, int depotID, Aktie aktie)
     {
         var client = new BrugerService.BrugerServiceClient(GrpcChannel.ForAddress("http://localhost:1337"));
+        GRPC.Bruger.Aktie temp = new GRPC.Bruger.Aktie()
+        {
+            Firma = aktie.Firma,
+            High = aktie.High,
+            Low = aktie.Low,
+            Navn = aktie.Navn,
+            Pris = aktie.Pris
+        };
         AktieRequest aktieRequest = new AktieRequest()
         {
-            Aktie = { aktie },
+            Aktie = { temp },
             Param = "buy",
             DepotID = depotID,
             Antal = antal

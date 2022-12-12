@@ -11,5 +11,5 @@ public interface IAktieService
     
     Task<List<Aktie>> GetAllAktier();
     
-    Task buyAktie(int antal, int depotID, GRPC.Bruger.Aktie aktie);
+    Task buyAktie(int antal, int depotID, Aktie aktie);
 }
