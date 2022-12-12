@@ -64,9 +64,25 @@
     </ModalContent>
 </Modal>
 
+<Alert Color="Color.Danger" @bind-Visible="@errorBuy">
+    <AlertMessage>Fejl!</AlertMessage>
+    <AlertDescription>Du har ikke nok penge til at udføre denne handling!</AlertDescription>
+    <CloseButton />
+</Alert>
+
+<Alert Color="Color.Success" @bind-Visible="@successBuy">
+    <AlertMessage>Succes!</AlertMessage>
+        <AlertDescription>Aktie købt!</AlertDescription>
+    <CloseButton />
+</Alert>
+
+
 
 @code{
 
+    
+    bool errorBuy = false;
+    bool successBuy = false;
     private List<Aktie>? aktier;
     private string msg = "";
     
@@ -116,11 +132,13 @@
 
         if (saldo<AktieTotal)
         {
-            Console.WriteLine("bøs");
+            errorBuy = true;
         }
         else if (saldo>=AktieTotal)
         {
-            AktieService.buyAktie(AktieAntal, depotID,aktie);  
+            AktieService.buyAktie(AktieAntal, depotID,aktie);
+            successBuy = true;
+            HideModal();
         }
        
         

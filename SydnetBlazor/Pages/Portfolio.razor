@@ -9,7 +9,7 @@
     <Column ColumnSize="ColumnSize.Is4">
         <Card Background="Background.Light">
             <CardHeader TextWeight="TextWeight.Bold">Rådighedsbeløb</CardHeader>
-            <CardTitle Size="3" Padding="Padding.Is4.OnX.Is4.OnY"><Badge Color="Color.Success">0 DKK</Badge></CardTitle>
+            <CardTitle Size="3" Padding="Padding.Is4.OnX.Is4.OnY"><Badge Color="Color.Success">@saldo DKK</Badge></CardTitle>
         </Card>
     </Column>
     <Column ColumnSize="ColumnSize.Is4">
@@ -96,8 +96,26 @@
 
     public int AktieAntal = 0;
     public double AktieTotal = 0.00;
-
+    public static double saldo = 0;
     private bool modalVisible;
+    
+    protected override void OnAfterRender(bool firstRender)
+    {
+        getSaldo();
+        if(firstRender)
+        {
+            //do nothing
+        }
+        StateHasChanged();
+    }
+    
+    private async Task getSaldo()
+    {
+        saldo = TopBar.saldo;
+        
+    }
+    
+    
 
     private Task ShowModal()
     {

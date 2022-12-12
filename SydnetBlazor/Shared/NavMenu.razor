@@ -28,7 +28,7 @@
             </BarItem>
             <BarItem>
                 <BarDropdown>
-                    <BarDropdownToggle Clicked="@john">
+                    <BarDropdownToggle>
                         <BarIcon IconName="IconName.User"/>
                         Min Profil
                     </BarDropdownToggle>
@@ -48,16 +48,25 @@
 @code {
     string logoTop = $"height: 100px;";
     string logoTopBrand = $"height: 100px;";
+    string reloadIcon = $"color: white;";
+    public static double saldo = 0;
 
-    private TopBar topBar;
-    private double saldo = 0;
-
-    private void john()
+    
+    protected override void OnAfterRender(bool firstRender)
     {
-        saldo = topBar.getSaldo();
+        getSaldo();
+        if(firstRender)
+        {
+    //do nothing
+        }
+        StateHasChanged();
     }
-
-
+    
+    
+    public async Task getSaldo()
+    {
+        saldo = TopBar.saldo;
+    }
 }
     
     
