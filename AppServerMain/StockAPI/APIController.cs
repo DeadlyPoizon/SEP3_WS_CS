@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading.Channels;
 using Domain.Models;
+using GRPCService.LogicImpl;
 using Json.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -16,7 +17,8 @@ public class APIController
    private readonly string KEY = "DMBU4F0ZU7OHSIF6";
    private readonly string FilePath;
    private Uri query;
-   
+   private Dictionary<string, string> stocks;
+
    public APIController()
    {
       string? path = Path.GetDirectoryName(
@@ -26,15 +28,25 @@ public class APIController
         path += "/stocks.json";
         FilePath = path;
 
-        Dictionary<string, string> stocks = initDictionary();
+        stocks = initDictionary();
         updateStocks(stocks);
    }
 
-   public void updateStocks(string symbol)
+   public async void updateStocks(string symbol)
    {
       double[] temp = getStockprices(symbol);
-      
-      
+
+       Aktie aktie = new Aktie()
+      {
+         Navn = symbol,
+         Firma = stocks[symbol],
+         Pris = temp[0],
+         High = temp[1],
+         Low = temp[2]
+      };
+
+       AktieLogic aktieLogic = new AktieLogic();
+       await aktieLogic.updateAktie(aktie);
    }
 
    public void updateStocks(Dictionary<string, string> symbols)
@@ -133,8 +145,7 @@ public class APIController
       firmaer.Add("NVDA", "Nvidia");
       firmaer.Add("WMT", "Wallmart");
       firmaer.Add("PEP", "PepsiCo");
-      firmaer.Add("NVO", "Novo Nordisk");
-      firmaer.Add("TSM", "Taiwan Semiconductor Manufacturing Company");*/
+      firmaer.Add("NVO", "Novo Nordisk");*/
       return firmaer;
    }
 }  
