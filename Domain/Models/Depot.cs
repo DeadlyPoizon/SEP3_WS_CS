@@ -7,4 +7,6 @@ public class Depot
     public string AktieNavn { get; set; }
     
     public int Antal { get; set; }
+    
+    public double købspris { get; set; }
 }

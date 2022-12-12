@@ -47,6 +47,22 @@ message allAktier{
 
 message getAllAktier{
   string param = 1;
+  int32 depotID = 2;
+}
+
+message getDepotFraID{
+  int32 depotID = 1;
+}
+
+message DepotResponse{
+  repeated Depot depoter = 1;
+}
+
+message Depot{
+  int32 id = 1;
+  string aktienavn = 2;
+  int32 antal = 3;
+  double pris = 4;
 }
 
 service BrugerService{
@@ -57,4 +73,5 @@ service BrugerService{
   rpc getAktie(AktieName) returns (Aktie); 
   rpc getAll(getAllAktier) returns (allAktier);
   rpc handleBruger(BrugerRequest) returns (BrugerResponse);
+  rpc getAllDepoter(getDepotFraID) returns (DepotResponse);
 }

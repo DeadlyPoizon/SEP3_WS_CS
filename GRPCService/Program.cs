@@ -5,6 +5,7 @@ using Grpc.Core;
 using GRPCService.LogicImpl;
 using Aktie = Domain.Models.Aktie;
 using Bruger = GRPC.Bruger.Bruger;
+using Depot = Domain.Models.Depot;
 
 
 using var channel = GrpcChannel.ForAddress("http://localhost:1337");
@@ -54,5 +55,5 @@ Aktie aktie = new Aktie()
 };
 
 AktieLogic aktieLogic = new AktieLogic();
-AktieResponse response = await aktieLogic.sellAktie(1, 6, aktie);
-Console.WriteLine(response.Response);
+List<Domain.Models.Depot> depoter = await aktieLogic.getAllAktierFromDepot(6);
+Console.WriteLine(depoter.Count);

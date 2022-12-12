@@ -59,7 +59,7 @@ public class AktieServiceImpl : IAktieService
         return aktier;
     }
 
-    public async Task buyAktie(int antal, int depotID, Aktie aktie)
+   public async Task buyAktie(int antal, int depotID, Aktie aktie)
     {
         AktieRequestDTO requestDto = new AktieRequestDTO()
         {
@@ -76,6 +76,6 @@ public class AktieServiceImpl : IAktieService
         {
             throw new Exception(result);
         }
-
+        
     }
 }

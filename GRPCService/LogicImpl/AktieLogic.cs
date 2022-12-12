@@ -4,6 +4,7 @@ using Grpc.Net.Client;
 using GRPCService.LogicInterfaces;
 using Newtonsoft.Json;
 using Aktie = Domain.Models.Aktie;
+using Depot = Domain.Models.Depot;
 
 namespace GRPCService.LogicImpl;
 
@@ -81,6 +82,38 @@ public class AktieLogic : IAktieLogic
         return aktie;
     }
 
+    public async Task<List<Domain.Models.Depot>> getAllAktierFromDepot(int depotID)
+    {
+        List<Domain.Models.Depot> depoter;
+        var client = new BrugerService.BrugerServiceClient(GrpcChannel.ForAddress("http://localhost:1337"));
+        getDepotFraID depotFraId = new getDepotFraID()
+        {
+            DepotID = depotID
+        };
+
+        DepotResponse response = await client.getAllDepoterAsync(depotFraId);
+        List<GRPC.Bruger.Depot>? depoterGRPC =
+            JsonConvert.DeserializeObject<List<GRPC.Bruger.Depot>>(response.Depoter.ToString());
+
+        depoter = new List<Depot>(depoterGRPC.Count);
+
+        for (int i = 0; i < depoterGRPC.Count; i++)
+        {
+            Domain.Models.Depot depot = new Domain.Models.Depot()
+            {
+                ID = depoterGRPC[i].Id,
+                AktieNavn = depoterGRPC[i].Aktienavn,
+                Antal = depoterGRPC[i].Antal,
+                købspris = depoterGRPC[i].Pris
+            };
+            depoter.Add(depot);
+        }
+
+        Console.WriteLine(depoter[0].AktieNavn);
+
+        return depoter;
+
+    }
     public async Task<List<Aktie>> getAllAktier()
     {
         List<Aktie> aktier;
@@ -158,5 +191,5 @@ public class AktieLogic : IAktieLogic
 
         return response;
     }
-
+    
 }
