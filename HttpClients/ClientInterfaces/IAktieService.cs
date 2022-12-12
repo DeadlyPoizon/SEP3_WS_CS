@@ -12,4 +12,6 @@ public interface IAktieService
     Task<List<Aktie>> GetAllAktier();
     
     Task buyAktie(int antal, int depotID, Aktie aktie);
+    
+    Task sellAktie(int antal, int depotID, Aktie aktie);
 }

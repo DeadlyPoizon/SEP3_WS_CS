@@ -63,7 +63,7 @@ public class BrugerLogic : IBrugerLogic
             Param = "reset",
         };
 
-        BrugerResponse response = await client.handleBrugerAsync(request);
+        BrugerResponse response = client.handleBruger(request);
 
         return response;
         

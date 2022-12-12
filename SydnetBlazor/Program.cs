@@ -36,6 +36,7 @@ builder.Services.AddScoped<IAuthService, JWTAuthService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthProvider>();
 builder.Services.AddScoped<IBrugerLogic, BrugerLogic>();
 builder.Services.AddScoped<IUserService, UserServiceImpl>();
+builder.Services.AddScoped<IAktieLogic, AktieLogic>();
 
 
 var app = builder.Build();

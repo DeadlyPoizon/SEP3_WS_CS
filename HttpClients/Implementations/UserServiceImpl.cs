@@ -30,8 +30,13 @@ public class UserServiceImpl : IUserService
     
     }
 
-    public Task resetBruger(string depotID)
+    public async Task resetBruger(string depotID)
     {
-        throw new NotImplementedException();
+        HttpResponseMessage response = await client.DeleteAsync($"Bruger/{depotID}");
+        if (!response.IsSuccessStatusCode)
+        {
+            string content = await response.Content.ReadAsStringAsync();
+            throw new Exception(content);
+        }
     }
 }

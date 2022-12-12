@@ -59,7 +59,7 @@ public class AktieServiceImpl : IAktieService
         return aktier;
     }
 
-   public async Task buyAktie(int antal, int depotID, Aktie aktie)
+    public async Task buyAktie(int antal, int depotID, Aktie aktie)
     {
         AktieRequestDTO requestDto = new AktieRequestDTO()
         {
@@ -70,12 +70,31 @@ public class AktieServiceImpl : IAktieService
 
         };
             
-        HttpResponseMessage response = await client.PostAsJsonAsync("/Aktie",requestDto);
+        HttpResponseMessage response = await client.PostAsJsonAsync("/Aktie/buy",requestDto);
         string result = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
         {
             throw new Exception(result);
         }
-        
+
+    }
+
+    public async Task sellAktie(int antal, int depotID, Aktie aktie)
+    {
+        AktieRequestDTO requestDto = new AktieRequestDTO()
+        {
+            antal = antal,
+            depotID = depotID,
+            aktie = aktie,
+            param = "buy"
+
+        };
+            
+        HttpResponseMessage response = await client.PostAsJsonAsync("/Aktie/sell",requestDto);
+        string result = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(result);
+        }
     }
 }

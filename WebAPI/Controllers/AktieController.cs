@@ -35,7 +35,7 @@ public class AktieController : ControllerBase
         }
     }
     
-    [HttpPost]
+    [HttpPost("buy")]
     public async Task<ActionResult<AktieResponse>> CreateAsync([FromBody]AktieRequestDTO requestDto)
     {
         try
@@ -43,6 +43,21 @@ public class AktieController : ControllerBase
 
             AktieResponse aktiee =
                 await aktieLogic.buyAktie(requestDto.antal, requestDto.depotID, requestDto.aktie);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    [HttpPost("sell")]
+    public async Task<ActionResult> UpdateAsync([FromBody] AktieRequestDTO requestDto)
+    {
+        try
+        {
+            await aktieLogic.sellAktie(requestDto.antal, requestDto.depotID, requestDto.aktie);
             return Ok();
         }
         catch (Exception e)
