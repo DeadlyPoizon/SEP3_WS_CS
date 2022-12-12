@@ -66,6 +66,7 @@ public class BrugerLogic : IBrugerLogic
         BrugerResponse response = await client.handleBrugerAsync(request);
 
         return response;
+        
 
     }
     
