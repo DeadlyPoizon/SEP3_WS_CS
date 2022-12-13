@@ -15,18 +15,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IBrugerLogic, BrugerLogic>();
 builder.Services.AddScoped<IAktieLogic, AktieLogic>();
 
-builder.Services.AddSwaggerGen(options =>
-{
-    options.CustomSchemaIds(type => type.ToString());
-});
-
+builder.Services.AddSwaggerGen(options => { options.CustomSchemaIds(type => type.ToString()); });
 
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.RequireHttpsMetadata = false;
     options.SaveToken = true;
-    options.TokenValidationParameters = new TokenValidationParameters()
+    options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
         ValidateAudience = true,
@@ -35,7 +31,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     };
 });
-
 
 
 var app = builder.Build();

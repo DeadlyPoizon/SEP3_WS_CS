@@ -1,10 +1,8 @@
 ﻿@using SydnetBlazor.Services
-@using SydnetBlazor.Services
 @using GRPCService.LogicInterfaces
-@using Domain.Models
-@using System.Security.Claims
-@using Domain.DTOs
 @using HttpClients.ClientInterfaces
+@using System.Security.Claims
+@using Domain.Models
 @inject IAuthService authService
 @inject IBrugerLogic brugerLogic
 @inject NavigationManager navMgr
@@ -20,14 +18,14 @@
         <BarEnd Padding="Padding.Is2.FromEnd">
             <AuthorizeView>
                 <Authorized>
-                <BarItem>
-                                        <BarDropdown>
-                                            <BarDropdownToggle>@context.User.Identity!.Name</BarDropdownToggle>
-                                            <BarDropdownMenu>
-                                                <BarDropdownItem Clicked="@LogoutAsync">Logout</BarDropdownItem>
-                                            </BarDropdownMenu>
-                                        </BarDropdown>
-                                        </BarItem>
+                    <BarItem>
+                        <BarDropdown>
+                            <BarDropdownToggle>@context.User.Identity!.Name</BarDropdownToggle>
+                            <BarDropdownMenu>
+                                <BarDropdownItem Clicked="@LogoutAsync">Logout</BarDropdownItem>
+                            </BarDropdownMenu>
+                        </BarDropdown>
+                    </BarItem>
                 </Authorized>
                 <NotAuthorized>
                     <BarItem>
@@ -44,7 +42,7 @@
     <ModalContent Centered>
         <ModalHeader>
             <ModalTitle>Login</ModalTitle>
-          
+
         </ModalHeader>
         <ModalBody>
             <Field>
@@ -52,7 +50,7 @@
                 <TextEdit @bind-Text="userName" MaxLength="25" Placeholder="Username">
                     <Feedback>
                         <ValidationError>Brugeren eksisterer ikke</ValidationError>
-                            </Feedback>
+                    </Feedback>
                 </TextEdit>
             </Field>
             <Field>
@@ -60,7 +58,7 @@
                 <TextEdit @bind-Text="password" Role="TextRole.Password" Placeholder="Password">
                     <Feedback>
                         <ValidationError>Forkert password!</ValidationError>
-                        </Feedback>
+                    </Feedback>
                 </TextEdit>
             </Field>
         </ModalBody>
@@ -76,7 +74,7 @@
     <ModalContent Centered>
         <ModalHeader>
             <ModalTitle>Sign Up</ModalTitle>
-          
+
         </ModalHeader>
         <ModalBody>
             <Field>
@@ -85,12 +83,12 @@
                     <Feedback>
                         <ValidationSuccess>Name is good.</ValidationSuccess>
                         <ValidationError>Enter valid name!</ValidationError>
-                            </Feedback>
+                    </Feedback>
                 </TextEdit>
             </Field>
             <Field>
                 <FieldLabel>Password</FieldLabel>
-                <TextEdit @bind-Text="password" Role="TextRole.Password" Placeholder="Password" />
+                <TextEdit @bind-Text="password" Role="TextRole.Password" Placeholder="Password"/>
             </Field>
         </ModalBody>
         <ModalFooter>
@@ -99,22 +97,21 @@
         </ModalFooter>
     </ModalContent>
 </Modal>
+
 @code{
-    
+
     private string userName;
     private string password;
     private string errorLabel;
     private string color = "";
-    
+
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = null!;
 
     public static string? name = "";
     private IEnumerable<Claim>? userClaims;
     public static double saldo = 0;
-    
 
-   
 
     private async Task LoginAsync()
     {
@@ -123,14 +120,13 @@
         {
             await authService.LoginAsync(userName, password);
             navMgr.NavigateTo("/");
-            AuthenticationState authState = await AuthState;
-            ClaimsPrincipal user = authState.User;
+            var authState = await AuthState;
+            var user = authState.User;
 
             userClaims = user.Claims;
             name = user.Identity!.Name!;
             saldo = brugerLogic.GetBruger(name).Result.Saldo;
             HideModal2();
-            
         }
         catch (Exception e)
         {
@@ -138,26 +134,26 @@
             errorLabel = $"Error: {e.Message}";
         }
     }
-    
+
 
     public double getSaldo()
     {
         return saldo;
     }
-    
+
     public async Task setSaldo()
     {
         name = "helmut";
-      saldo = brugerLogic.GetBruger(name).Result.Saldo;
+        saldo = brugerLogic.GetBruger(name).Result.Saldo;
         StateHasChanged();
     }
-    
+
     private async Task RegisterAsync()
     {
         errorLabel = "";
         try
         {
-            await userService.Create(new Bruger(userName,password));
+            await userService.Create(new Bruger(userName, password));
             navMgr.NavigateTo("/Portfolio");
             HideModal();
             userName = "";
@@ -171,6 +167,7 @@
             errorLabel = $"Error: {e.Message}";
         }
     }
+
     private Modal registerModal;
     private Modal loginModal;
 
@@ -187,7 +184,7 @@
 
         return Task.CompletedTask;
     }
-    
+
     private Task ShowModal2()
     {
         loginModal.Show();
@@ -201,9 +198,10 @@
 
         return Task.CompletedTask;
     }
-    
+
     private async Task LogoutAsync()
     {
     // Ikke impl
     }
+
 }

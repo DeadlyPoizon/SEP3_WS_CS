@@ -1,7 +1,5 @@
 ﻿namespace SydnetBlazor.Data;
 
-
-
 public class TempAktie
 {
     public string Firma { get; set; }
@@ -9,5 +7,4 @@ public class TempAktie
     public double Price { get; set; }
     public double PriceHigh { get; set; }
     public double PriceLow { get; set; }
-    
 }

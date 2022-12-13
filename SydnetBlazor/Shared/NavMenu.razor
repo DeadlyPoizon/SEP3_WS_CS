@@ -1,5 +1,4 @@
-﻿@using System.Security.Claims
-@using GRPCService.LogicInterfaces
+﻿@using GRPCService.LogicInterfaces
 @inject IBrugerLogic brugerLogic
 
 
@@ -9,64 +8,71 @@
      NavigationBreakpoint="Breakpoint.Tablet"
      ThemeContrast="ThemeContrast.Dark">
     <BarBrand Style="@logoTopBrand">
-        <a href="/" style="@logoTop"><img class="logo" src="Sydnet_Logo.png"/></a>
+        <a href="/" style="@logoTop">
+            <img class="logo" src="Sydnet_Logo.png"/>
+        </a>
     </BarBrand>
     <AuthorizeView>
-    <BarMenu>
-        <BarStart>
-            <BarItem>
-                <BarLink To="Aktier">
-                    <BarIcon IconName="IconName.Dashboard" />
-                    Aktier
-                </BarLink>
-            </BarItem>
-            <BarItem Disabled>
-                <BarLink disabled="true">
-                    <BarIcon IconName="IconName.Seedling" />
-                    Rangliste
-                </BarLink>
-            </BarItem>
-            <BarItem>
-                <BarDropdown>
-                    <BarDropdownToggle>
-                        <BarIcon IconName="IconName.User"/>
-                        Min Profil
-                    </BarDropdownToggle>
-                    <BarDropdownMenu>
-                        <BarDropdownItem><BarIcon IconName="IconName.Wallet"/>@saldo DKK</BarDropdownItem>
-                        <BarLink To="Portfolio"><BarDropdownItem><BarIcon IconName="IconName.Briefcase"/>Portefølje</BarDropdownItem></BarLink>
-                        <BarLink To="Transactions"><BarDropdownItem><BarIcon IconName="IconName.Book"/>Transaktioner</BarDropdownItem></BarLink>
-                        <BarLink To="Settings"><BarDropdownItem><BarIcon IconName="IconName.Wrench"/>Indstillinger</BarDropdownItem></BarLink>
-                    </BarDropdownMenu>
-                </BarDropdown>
-            </BarItem>
-        </BarStart>
-    </BarMenu>
+        <BarMenu>
+            <BarStart>
+                <BarItem>
+                    <BarLink To="Aktier">
+                        <BarIcon IconName="IconName.Dashboard"/>
+                        Aktier
+                    </BarLink>
+                </BarItem>
+                <BarItem Disabled>
+                    <BarLink disabled="true">
+                        <BarIcon IconName="IconName.Seedling"/>
+                        Rangliste
+                    </BarLink>
+                </BarItem>
+                <BarItem>
+                    <BarDropdown>
+                        <BarDropdownToggle>
+                            <BarIcon IconName="IconName.User"/>
+                            Min Profil
+                        </BarDropdownToggle>
+                        <BarDropdownMenu>
+                            <BarDropdownItem><BarIcon IconName="IconName.Wallet"/>@saldo DKK</BarDropdownItem>
+                            <BarLink To="Portfolio">
+                                <BarDropdownItem><BarIcon IconName="IconName.Briefcase"/>Portefølje</BarDropdownItem>
+                            </BarLink>
+                            <BarLink To="Transactions">
+                                <BarDropdownItem><BarIcon IconName="IconName.Book"/>Transaktioner</BarDropdownItem>
+                            </BarLink>
+                            <BarLink To="Settings">
+                                <BarDropdownItem><BarIcon IconName="IconName.Wrench"/>Indstillinger</BarDropdownItem>
+                            </BarLink>
+                        </BarDropdownMenu>
+                    </BarDropdown>
+                </BarItem>
+            </BarStart>
+        </BarMenu>
     </AuthorizeView>
 </Bar>
 
 @code {
-    string logoTop = $"height: 100px;";
-    string logoTopBrand = $"height: 100px;";
-    string reloadIcon = $"color: white;";
+    string logoTop = "height: 100px;";
+    string logoTopBrand = "height: 100px;";
+    string reloadIcon = "color: white;";
     public static double saldo = 0;
 
-    
+
     protected override void OnAfterRender(bool firstRender)
     {
         getSaldo();
-        if(firstRender)
+        if (firstRender)
         {
     //do nothing
         }
         StateHasChanged();
     }
-    
-    
+
+
     public async Task getSaldo()
     {
         saldo = TopBar.saldo;
     }
+
 }
-    
-    

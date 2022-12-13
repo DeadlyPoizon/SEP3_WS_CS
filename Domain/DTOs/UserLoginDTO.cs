@@ -2,19 +2,16 @@
 
 public class UserLoginDTO
 {
-    public string Username { get; init; }
-    public string Password { get; init; }
-    
-    public UserLoginDTO(String username,String password)
+    public UserLoginDTO(string username, string password)
     {
-        this.Username = username;
-        this.Password = password;
-        
+        Username = username;
+        Password = password;
     }
-    
+
     public UserLoginDTO()
     {
-       
-        
     }
+
+    public string Username { get; init; }
+    public string Password { get; init; }
 }

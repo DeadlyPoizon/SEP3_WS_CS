@@ -11,14 +11,10 @@ namespace GRPCService.LogicImpl;
 
 public class AktieLogic : IAktieLogic
 {
-    public AktieLogic()
-    {
-    }
-
     public async Task<AktieResponse> updateAktie(Aktie aktie)
     {
         var client = new BrugerService.BrugerServiceClient(GrpcChannel.ForAddress("http://localhost:1337"));
-        GRPC.Bruger.Aktie grpcAktie = new GRPC.Bruger.Aktie()
+        var grpcAktie = new GRPC.Bruger.Aktie
         {
             Navn = aktie.Navn,
             Firma = aktie.Firma,
@@ -27,30 +23,27 @@ public class AktieLogic : IAktieLogic
             Low = aktie.Low
         };
 
-        RepeatedField<GRPC.Bruger.Aktie> repeatedField = new RepeatedField<GRPC.Bruger.Aktie>();
+        var repeatedField = new RepeatedField<GRPC.Bruger.Aktie>();
         repeatedField.Capacity = 1;
         repeatedField.Insert(0, grpcAktie);
 
-        AktieRequest request = new AktieRequest()
+        var request = new AktieRequest
         {
             Aktie = { repeatedField },
             Antal = 1,
             Param = "update"
         };
 
-        AktieResponse response = await client.handleAktieAsync(request);
+        var response = await client.handleAktieAsync(request);
         Console.WriteLine(response.Response);
         return response;
     }
 
     public async Task<List<AktieResponse>> updateAktie(Aktie[] aktie)
     {
-        List<AktieResponse> responses = new List<AktieResponse>();
+        var responses = new List<AktieResponse>();
 
-        for (int i = 0; i >= aktie.Length; i++)
-        {
-           responses[i] = await updateAktie(aktie[i]);
-        }
+        for (var i = 0; i >= aktie.Length; i++) responses[i] = await updateAktie(aktie[i]);
 
         return responses;
     }
@@ -63,16 +56,14 @@ public class AktieLogic : IAktieLogic
     public async Task<Aktie> getAktie(string name)
     {
         var client = new BrugerService.BrugerServiceClient(GrpcChannel.ForAddress("http://localhost:1337"));
-        
-        AktieName aktieName = new AktieName()
+
+        var aktieName = new AktieName
         {
-            Name = name,
-            
-            
+            Name = name
         };
 
-        GRPC.Bruger.Aktie grpcAktie = await client.getAktieAsync(aktieName);
-        Aktie aktie = new Aktie()
+        var grpcAktie = await client.getAktieAsync(aktieName);
+        var aktie = new Aktie
         {
             Firma = grpcAktie.Firma,
             High = grpcAktie.High,
@@ -87,20 +78,20 @@ public class AktieLogic : IAktieLogic
     {
         List<Depot> depoter;
         var client = new BrugerService.BrugerServiceClient(GrpcChannel.ForAddress("http://localhost:1337"));
-        getDepotFraID depotFraId = new getDepotFraID()
+        var depotFraId = new getDepotFraID
         {
             DepotID = depotID
         };
 
-        DepotResponse response = await client.getAllDepoterAsync(depotFraId);
-        List<GRPC.Bruger.Depot>? depoterGRPC =
+        var response = await client.getAllDepoterAsync(depotFraId);
+        var depoterGRPC =
             JsonConvert.DeserializeObject<List<GRPC.Bruger.Depot>>(response.Depoter.ToString());
 
         depoter = new List<Depot>(depoterGRPC.Count);
 
-        for (int i = 0; i < depoterGRPC.Count; i++)
+        for (var i = 0; i < depoterGRPC.Count; i++)
         {
-            Domain.Models.Depot depot = new Domain.Models.Depot()
+            var depot = new Depot
             {
                 ID = depoterGRPC[i].Id,
                 AktieNavn = depoterGRPC[i].Aktienavn,
@@ -113,33 +104,34 @@ public class AktieLogic : IAktieLogic
         Console.WriteLine(depoter[0].AktieNavn);
 
         return depoter;
-
     }
+
     public async Task<List<Aktie>> getAllAktier()
     {
         List<Aktie> aktier;
 
         var client = new BrugerService.BrugerServiceClient(GrpcChannel.ForAddress("http://localhost:1337"));
-        getAllAktier getAllAktier = new getAllAktier()
+        var getAllAktier = new getAllAktier
         {
             Param = "get"
         };
-        allAktier allAktier = await client.getAllAsync(getAllAktier);
-        List<GRPC.Bruger.Aktie>? tempGRPC = JsonConvert.DeserializeObject<List<GRPC.Bruger.Aktie>>(allAktier.Aktier.ToString());
+        var allAktier = await client.getAllAsync(getAllAktier);
+        var tempGRPC = JsonConvert.DeserializeObject<List<GRPC.Bruger.Aktie>>(allAktier.Aktier.ToString());
 
         aktier = new List<Aktie>(tempGRPC.Count);
-        for (int i = 0; i < tempGRPC.Count; i++)
+        for (var i = 0; i < tempGRPC.Count; i++)
         {
-            Aktie tempaktie = new Aktie()
+            var tempaktie = new Aktie
             {
                 Navn = tempGRPC[i].Navn,
                 Firma = tempGRPC[i].Firma,
                 Pris = tempGRPC[i].Pris,
                 High = tempGRPC[i].High,
-                Low = tempGRPC[i].Low,
+                Low = tempGRPC[i].Low
             };
             aktier.Add(tempaktie);
         }
+
         return aktier;
     }
 
@@ -147,7 +139,7 @@ public class AktieLogic : IAktieLogic
     public async Task<AktieResponse> buyAktie(int antal, int depotID, Aktie aktie)
     {
         var client = new BrugerService.BrugerServiceClient(GrpcChannel.ForAddress("http://localhost:1337"));
-        GRPC.Bruger.Aktie temp = new GRPC.Bruger.Aktie()
+        var temp = new GRPC.Bruger.Aktie
         {
             Firma = aktie.Firma,
             High = aktie.High,
@@ -155,7 +147,7 @@ public class AktieLogic : IAktieLogic
             Navn = aktie.Navn,
             Pris = aktie.Pris
         };
-        AktieRequest aktieRequest = new AktieRequest()
+        var aktieRequest = new AktieRequest
         {
             Aktie = { temp },
             Param = "buy",
@@ -163,16 +155,15 @@ public class AktieLogic : IAktieLogic
             Antal = antal
         };
 
-        AktieResponse response = await client.handleAktieAsync(aktieRequest);
+        var response = await client.handleAktieAsync(aktieRequest);
 
         return response;
-
     }
 
     public async Task<AktieResponse> sellAktie(int antal, int depotID, Aktie aktie)
     {
         var client = new BrugerService.BrugerServiceClient(GrpcChannel.ForAddress("http://localhost:1337"));
-        GRPC.Bruger.Aktie temp = new GRPC.Bruger.Aktie()
+        var temp = new GRPC.Bruger.Aktie
         {
             Firma = aktie.Firma,
             High = aktie.High,
@@ -180,7 +171,7 @@ public class AktieLogic : IAktieLogic
             Navn = aktie.Navn,
             Pris = aktie.Pris
         };
-        AktieRequest aktieRequest = new AktieRequest()
+        var aktieRequest = new AktieRequest
         {
             Aktie = { temp },
             Param = "sell",
@@ -188,27 +179,27 @@ public class AktieLogic : IAktieLogic
             Antal = antal
         };
 
-        AktieResponse response = await client.handleAktieAsync(aktieRequest);
+        var response = await client.handleAktieAsync(aktieRequest);
 
         return response;
     }
 
-    public async Task<List<Transaktion>> getTransaktionerFraUsername(String username)
-    { 
+    public async Task<List<Transaktion>> getTransaktionerFraUsername(string username)
+    {
         List<Transaktion> transaktioner;
         var client = new BrugerService.BrugerServiceClient(GrpcChannel.ForAddress("http://localhost:1337"));
-        TransactionRequest request = new TransactionRequest()
+        var request = new TransactionRequest
         {
             Username = username
         };
 
-        AllTransactions response = await client.getAllTransactionsAsync(request);
-        List<Transaction>? temp = JsonConvert.DeserializeObject<List<Transaction>>(response.Transaktioner.ToString());
+        var response = await client.getAllTransactionsAsync(request);
+        var temp = JsonConvert.DeserializeObject<List<Transaction>>(response.Transaktioner.ToString());
         transaktioner = new List<Transaktion>(temp.Count);
 
-        for (int i = 0; i < temp.Count; i++)
+        for (var i = 0; i < temp.Count; i++)
         {
-            Transaktion transaktion = new Transaktion()
+            var transaktion = new Transaktion
             {
                 Aktienavn = temp[i].Aktienavn,
                 antal = temp[i].Antal,
@@ -221,5 +212,4 @@ public class AktieLogic : IAktieLogic
 
         return transaktioner;
     }
-    
 }

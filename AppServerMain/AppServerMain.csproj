@@ -8,21 +8,21 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Remove="StockAPI\stocks.json" />
+        <None Remove="StockAPI\stocks.json"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Grpc.Tools" Version="2.50.0">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-      <PackageReference Include="Json.Net" Version="1.0.33" />
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+        <PackageReference Include="Grpc.Tools" Version="2.50.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Json.Net" Version="1.0.33"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.2"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Domain\Domain.csproj" />
-      <ProjectReference Include="..\GRPCService\GRPCService.csproj" />
+        <ProjectReference Include="..\Domain\Domain.csproj"/>
+        <ProjectReference Include="..\GRPCService\GRPCService.csproj"/>
     </ItemGroup>
 
 </Project>

@@ -1,32 +1,29 @@
 ﻿@page "/Aktier"
-@attribute [Authorize]
-@using SydnetBlazor.Data
-@using Domain.Models
-@using Domain.Models
-@using GRPCService.LogicInterfaces
 @using HttpClients.ClientInterfaces
+@using GRPCService.LogicInterfaces
+@using Domain.Models
 @using System.Security.Claims
+@attribute [Authorize]
 @inject IAktieService AktieService
 @inject IBrugerLogic brugerLogic
-
-
-
 
 
 <body>
 
 <h3>Aktier</h3>
 <DataGrid TItem="Aktie" Data="@aktier" @bind-SelectedRow="@selectedAktie" Filterable Responsive>
-    <DataGridColumn Field="@nameof( Aktie.Firma )" Caption="Firma" Editable="false" ></DataGridColumn>
-    <DataGridColumn Field="@nameof( Aktie.Navn)" Caption="Forkortelse" Editable="false" Filterable="false"></DataGridColumn>
-    <DataGridColumn Field="@nameof( Aktie.Pris)" Caption="Pris" Editable="false" Filterable="false"></DataGridColumn>
-    <DataGridColumn Field="@nameof( Aktie.High )" Caption="Høj" Editable="false" Filterable="false"></DataGridColumn>
-    <DataGridColumn Field="@nameof( Aktie.Low)" Caption="Lav" Editable="false" Filterable="false"></DataGridColumn>
-    <DataGridColumn Filterable="false"><DisplayTemplate>
-        <Button Color="Color.Success" Clicked="@(()=>ShowModal())">
-            Køb
-        </Button>
-    </DisplayTemplate></DataGridColumn>
+    <DataGridColumn Field="@nameof(Aktie.Firma)" Caption="Firma" Editable="false"></DataGridColumn>
+    <DataGridColumn Field="@nameof(Aktie.Navn)" Caption="Forkortelse" Editable="false" Filterable="false"></DataGridColumn>
+    <DataGridColumn Field="@nameof(Aktie.Pris)" Caption="Pris" Editable="false" Filterable="false"></DataGridColumn>
+    <DataGridColumn Field="@nameof(Aktie.High)" Caption="Høj" Editable="false" Filterable="false"></DataGridColumn>
+    <DataGridColumn Field="@nameof(Aktie.Low)" Caption="Lav" Editable="false" Filterable="false"></DataGridColumn>
+    <DataGridColumn Filterable="false">
+        <DisplayTemplate>
+            <Button Color="Color.Success" Clicked="@(() => ShowModal())">
+                Køb
+            </Button>
+        </DisplayTemplate>
+    </DataGridColumn>
 </DataGrid>
 </body>
 
@@ -34,28 +31,28 @@
     <ModalContent Centered>
         <ModalHeader>
             <ModalTitle>Køb aktier</ModalTitle>
-          
+
         </ModalHeader>
         <ModalBody>
             <Field>
                 <FieldLabel>Firma</FieldLabel>
-                <TextEdit Text="@selectedAktie.Firma" ReadOnly="true" />
+                <TextEdit Text="@selectedAktie.Firma" ReadOnly="true"/>
             </Field>
             <Field>
                 <FieldLabel>Pris</FieldLabel>
                 <TextEdit Text="@selectedAktie.Pris.ToString()" ReadOnly="true"/>
             </Field>
-            
+
             <Field>
                 <FieldLabel>Antal</FieldLabel>
                 <NumericEdit @bind-Value="AktieAntal" @onchange="updatePrice" TValue="int"/>
             </Field>
-            
+
             <Field>
                 <FieldLabel>Ordre Pris</FieldLabel>
                 <NumericEdit @bind-Value="AktieTotal" TValue="double" ReadOnly="true"/>
             </Field>
-            
+
         </ModalBody>
         <ModalFooter>
             <Button Color="Color.Secondary" Clicked="@HideModal">Luk</Button>
@@ -67,25 +64,26 @@
 <Alert Color="Color.Danger" @bind-Visible="@errorBuy">
     <AlertMessage>Fejl!</AlertMessage>
     <AlertDescription>Du har ikke nok penge til at udføre denne handling!</AlertDescription>
-    <CloseButton />
+    <CloseButton/>
 </Alert>
 
 <Alert Color="Color.Success" @bind-Visible="@successBuy">
     <AlertMessage>Succes!</AlertMessage>
-        <AlertDescription>Aktie købt!</AlertDescription>
-    <CloseButton />
+    <AlertDescription>Aktie købt!</AlertDescription>
+    <CloseButton/>
 </Alert>
 
 @code{
 
-    
-    bool errorBuy = false;
-    bool successBuy = false;
+
+    bool errorBuy;
+    bool successBuy;
     private List<Aktie>? aktier;
     private string msg = "";
-    
+
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = null!;
+
     public string? name = "";
     private IEnumerable<Claim>? userClaims;
 
@@ -94,14 +92,12 @@
         msg = "";
         try
         {
-            AuthenticationState authState = await AuthState;
-            ClaimsPrincipal user = authState.User;
+            var authState = await AuthState;
+            var user = authState.User;
 
             userClaims = user.Claims;
             name = user.Identity!.Name!;
             aktier = await AktieService.GetAllAktier();
-            
-            
         }
         catch (Exception e)
         {
@@ -112,49 +108,42 @@
 
     private void buyAktie()
     {
-        
-        Aktie aktie = new Aktie()
+        var aktie = new Aktie
         {
             Firma = selectedAktie.Firma,
             High = selectedAktie.High,
             Low = selectedAktie.Low,
             Navn = selectedAktie.Navn,
             Pris = selectedAktie.Pris
-         
         };
-        
-        
-       
-        int depotID = brugerLogic.GetBruger(name).Result.DepotID;
-        double saldo = brugerLogic.GetBruger(name).Result.Saldo;
 
-        if (saldo<AktieTotal)
+
+        var depotID = brugerLogic.GetBruger(name).Result.DepotID;
+        var saldo = brugerLogic.GetBruger(name).Result.Saldo;
+
+        if (saldo < AktieTotal)
         {
             errorBuy = true;
-           HideModal();
+            HideModal();
         }
-        else if (saldo>=AktieTotal)
+        else if (saldo >= AktieTotal)
         {
-            AktieService.buyAktie(AktieAntal, depotID,aktie);
+            AktieService.buyAktie(AktieAntal, depotID, aktie);
             successBuy = true;
-           HideModal();
+            HideModal();
         }
-       
-        
-     
     }
 
 
-    public Aktie? selectedAktie = new Aktie();
+    public Aktie? selectedAktie = new();
 
-    public int AktieAntal = 0;
-    public double AktieTotal = 0.00;
+    public int AktieAntal;
+    public double AktieTotal;
 
     private bool modalVisible;
 
     private Task ShowModal()
     {
-        
         modalVisible = true;
 
         return Task.CompletedTask;
@@ -166,15 +155,15 @@
 
         return Task.CompletedTask;
     }
-    
+
     private void updatePrice()
     {
         AktieTotal = AktieAntal * selectedAktie.Pris;
     }
-    
+
     private async Task updateSaldo()
     {
-        TopBar topbar = new TopBar();
+        var topbar = new TopBar();
         await topbar.setSaldo();
     }
 

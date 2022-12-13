@@ -5,26 +5,21 @@ using GRPCService.LogicImpl;
 using GRPCService.LogicInterfaces;
 using HttpClients.ClientInterfaces;
 using HttpClients.Implementations;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Web;
 using SydnetBlazor.Auth;
-using SydnetBlazor.Data;
 using SydnetBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services
-    .AddBlazorise( options =>
-    {
-        options.Immediate = true;
-    } )
+    .AddBlazorise(options => { options.Immediate = true; })
     .AddBootstrapProviders()
     .AddFontAwesomeIcons();
 
 builder.Services.AddScoped(
-    sp => 
-        new HttpClient { 
-            BaseAddress = new Uri("https://localhost:7064") 
+    sp =>
+        new HttpClient
+        {
+            BaseAddress = new Uri("https://localhost:7064")
         }
 );
 

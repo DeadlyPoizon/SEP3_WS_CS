@@ -1,18 +1,13 @@
-using Domain.Models;
 using GRPC.Bruger;
 using Grpc.Net.Client;
-using Grpc.Core;
 using GRPCService.LogicImpl;
 using Aktie = Domain.Models.Aktie;
-using Bruger = GRPC.Bruger.Bruger;
-using Depot = Domain.Models.Depot;
-
 
 using var channel = GrpcChannel.ForAddress("http://localhost:1337");
 var client = new BrugerService.BrugerServiceClient(channel);
 
 
-Bruger helloRequest = new Bruger()
+var helloRequest = new Bruger
 {
     Username = "bigman5",
     Password = "biggerman3",
@@ -20,7 +15,7 @@ Bruger helloRequest = new Bruger()
     Saldo = 1337.6969
 };
 
-BrugerRequest request = new BrugerRequest()
+var request = new BrugerRequest
 {
     Bruger = { helloRequest },
     Param = "hello"
@@ -28,14 +23,14 @@ BrugerRequest request = new BrugerRequest()
 
 async Task<BrugerResponse> HelloTask()
 {
-    BrugerResponse helloResponse = await client.createBrugerAsync(helloRequest);
+    var helloResponse = await client.createBrugerAsync(helloRequest);
     Console.WriteLine(helloResponse.Response);
     return helloResponse;
 }
 
 async Task<Bruger> getBruger()
 {
-    Bruger bruger = await client.getBrugerAsync(request);
+    var bruger = await client.getBrugerAsync(request);
     Console.WriteLine(bruger.Saldo);
     return bruger;
 }
@@ -44,8 +39,8 @@ async Task<Bruger> getBruger()
 //Console.WriteLine(response.Response);
 //Bruger bruger = await getBruger();
 //Console.WriteLine(bruger.DepotID);
-BrugerLogic logic = new BrugerLogic();
-Aktie aktie = new Aktie()
+var logic = new BrugerLogic();
+var aktie = new Aktie
 {
     Navn = "TSLA",
     Firma = "Tesla",
@@ -54,6 +49,6 @@ Aktie aktie = new Aktie()
     Low = 1337
 };
 
-AktieLogic aktieLogic = new AktieLogic();
-List<Domain.Models.Depot> depoter = await aktieLogic.getAllAktierFromDepot(6);
+var aktieLogic = new AktieLogic();
+var depoter = await aktieLogic.getAllAktierFromDepot(6);
 Console.WriteLine(depoter.Count);

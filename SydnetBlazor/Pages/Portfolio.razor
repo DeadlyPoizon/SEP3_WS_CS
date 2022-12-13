@@ -1,95 +1,100 @@
 ﻿@page "/Portfolio"
-
-@using SydnetBlazor.Data
-@using Domain.Models
-@using GRPCService.LogicInterfaces
 @using HttpClients.ClientInterfaces
+@using GRPCService.LogicInterfaces
+@using Domain.Models
 @using System.Security.Claims
 @inject IAktieService aktieService
 @inject IBrugerLogic brugerLogic
 @inject IAktieLogic aktieLogic
 
 <AuthorizeView>
-<body>
-<h3>Mit Portefølje</h3>
-<Row>
-    <Column ColumnSize="ColumnSize.Is4">
-        <Card Background="Background.Light">
-            <CardHeader TextWeight="TextWeight.Bold">Rådighedsbeløb</CardHeader>
-            <CardTitle Size="3" Padding="Padding.Is4.OnX.Is4.OnY"><Badge Color="Color.Success">@saldo DKK</Badge></CardTitle>
-        </Card>
-    </Column>
-    <Column ColumnSize="ColumnSize.Is4">
-        <Card Background="Background.Light">
-            <CardHeader TextWeight="TextWeight.Bold">Portefølje Værdi</CardHeader>
-            <CardTitle Size="3" Padding="Padding.Is4.OnX.Is4.OnY"><Badge Color="Color.Success">0 DKK</Badge></CardTitle>
+    <body>
+    <h3>Mit Portefølje</h3>
+    <Row>
+        <Column ColumnSize="ColumnSize.Is4">
+            <Card Background="Background.Light">
+                <CardHeader TextWeight="TextWeight.Bold">Rådighedsbeløb</CardHeader>
+                <CardTitle Size="3" Padding="Padding.Is4.OnX.Is4.OnY">
+                    <Badge Color="Color.Success">@saldo DKK</Badge>
+                </CardTitle>
             </Card>
-    </Column>
-    <Column ColumnSize="ColumnSize.Is4">
+        </Column>
+        <Column ColumnSize="ColumnSize.Is4">
+            <Card Background="Background.Light">
+                <CardHeader TextWeight="TextWeight.Bold">Portefølje Værdi</CardHeader>
+                <CardTitle Size="3" Padding="Padding.Is4.OnX.Is4.OnY">
+                    <Badge Color="Color.Success">0 DKK</Badge>
+                </CardTitle>
+            </Card>
+        </Column>
+        <Column ColumnSize="ColumnSize.Is4">
             <Card Background="Background.Light">
                 <CardHeader TextWeight="TextWeight.Bold">P/L</CardHeader>
-                <CardTitle Size="3" Padding="Padding.Is4.OnX.Is4.OnY"><Badge Color="Color.Success">0 DKK</Badge></CardTitle>
-                </Card>
+                <CardTitle Size="3" Padding="Padding.Is4.OnX.Is4.OnY">
+                    <Badge Color="Color.Success">0 DKK</Badge>
+                </CardTitle>
+            </Card>
         </Column>
-</Row>
-<Row Padding="Padding.Is4.OnY">
-    <Column ColumnSize="ColumnSize.Is8">
-        <DataGrid TItem="Depot" Data="@aktier" @bind-SelectedRow="@selectedAktie" Filterable Responsive>
-            <DataGridColumn Field="@nameof(Depot.AktieNavn)" Caption="Firma" Editable="false"></DataGridColumn>
-            <DataGridColumn Field="@nameof(Depot.Antal)" Caption="Antal" Editable="false" Filterable="false"></DataGridColumn>
-            <DataGridColumn Field="@nameof(Depot.købspris)" Caption="Købspris" Editable="false" Filterable="false"></DataGridColumn>
-            <DataGridColumn Filterable="false" Caption="Profit / Loss"></DataGridColumn>
-            <DataGridColumn Filterable="false">
-                <DisplayTemplate Context="john">
-                    <Button Color="Color.Success" Clicked="@(() => ShowModal())">
-                        Sælg
-                    </Button>
-                </DisplayTemplate></DataGridColumn>
-        </DataGrid>
-    </Column>
-     <Column ColumnSize="ColumnSize.Is4">
-                <Card Background="Background.Light">
-                    <CardHeader TextWeight="TextWeight.Bold">Graf</CardHeader>
-                    <CardTitle Size="3" Padding="Padding.Is4.OnX.Is4.OnY"></CardTitle>
-                    </Card>
-            </Column>
-</Row>
+    </Row>
+    <Row Padding="Padding.Is4.OnY">
+        <Column ColumnSize="ColumnSize.Is8">
+            <DataGrid TItem="Depot" Data="@aktier" @bind-SelectedRow="@selectedAktie" Filterable Responsive>
+                <DataGridColumn Field="@nameof(Depot.AktieNavn)" Caption="Firma" Editable="false"></DataGridColumn>
+                <DataGridColumn Field="@nameof(Depot.Antal)" Caption="Antal" Editable="false" Filterable="false"></DataGridColumn>
+                <DataGridColumn Field="@nameof(Depot.købspris)" Caption="Købspris" Editable="false" Filterable="false"></DataGridColumn>
+                <DataGridColumn Filterable="false" Caption="Profit / Loss"></DataGridColumn>
+                <DataGridColumn Filterable="false">
+                    <DisplayTemplate Context="john">
+                        <Button Color="Color.Success" Clicked="@(() => ShowModal())">
+                            Sælg
+                        </Button>
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGrid>
+        </Column>
+        <Column ColumnSize="ColumnSize.Is4">
+            <Card Background="Background.Light">
+                <CardHeader TextWeight="TextWeight.Bold">Graf</CardHeader>
+                <CardTitle Size="3" Padding="Padding.Is4.OnX.Is4.OnY"></CardTitle>
+            </Card>
+        </Column>
+    </Row>
 
-</body>
+    </body>
 </AuthorizeView>
 
 <Modal @bind-Visible="@modalVisible">
     <ModalContent Centered>
         <ModalHeader>
             <ModalTitle>Køb aktier</ModalTitle>
-          
+
         </ModalHeader>
         <ModalBody>
             <Field>
                 <FieldLabel>Firma</FieldLabel>
-                <TextEdit Text="@selectedAktie.AktieNavn" ReadOnly="true" />
+                <TextEdit Text="@selectedAktie.AktieNavn" ReadOnly="true"/>
             </Field>
             <Field>
                 <FieldLabel>Købspris</FieldLabel>
                 <TextEdit Text="@selectedAktie.købspris.ToString()" ReadOnly="true"/>
             </Field>
-            
-               <Field>
-                            <FieldLabel>Antal Ejet</FieldLabel>
-                            <TextEdit Text="@selectedAktie.Antal.ToString()" ReadOnly="true"/>
-                        </Field>
-            
-            
+
+            <Field>
+                <FieldLabel>Antal Ejet</FieldLabel>
+                <TextEdit Text="@selectedAktie.Antal.ToString()" ReadOnly="true"/>
+            </Field>
+
+
             <Field>
                 <FieldLabel>Antal Du Vil Sælge</FieldLabel>
                 <NumericEdit @bind-Value="AktieAntal" @onchange="updatePrice" TValue="int"/>
             </Field>
-            
+
             <Field>
-                <FieldLabel>Samlet  Salgspris</FieldLabel>
+                <FieldLabel>Samlet Salgspris</FieldLabel>
                 <NumericEdit @bind-Value="AktieTotal" TValue="double" ReadOnly="true"/>
             </Field>
-            
+
         </ModalBody>
         <ModalFooter>
             <Button Color="Color.Secondary" Clicked="@HideModal">Luk</Button>
@@ -101,74 +106,69 @@
 <Alert Color="Color.Danger" @bind-Visible="@errorBuy">
     <AlertMessage>Fejl!</AlertMessage>
     <AlertDescription>Du prøver at sælge flere aktier end du ejer</AlertDescription>
-    <CloseButton />
+    <CloseButton/>
 </Alert>
 
 <Alert Color="Color.Success" @bind-Visible="@successBuy">
     <AlertMessage>Succes!</AlertMessage>
-        <AlertDescription>Aktie Solgt!</AlertDescription>
-    <CloseButton />
+    <AlertDescription>Aktie Solgt!</AlertDescription>
+    <CloseButton/>
 </Alert>
 
 
 @code{
-    bool errorBuy = false;
-    bool successBuy = false;
+    bool errorBuy;
+    bool successBuy;
     private List<Depot>? aktier;
-    public Depot? selectedAktie = new Depot();
+    public Depot? selectedAktie = new();
 
-    public int AktieAntal = 0;
-    public double AktieTotal = 0.00;
-    public static double saldo = 0;
+    public int AktieAntal;
+    public double AktieTotal;
+    public static double saldo;
     private bool modalVisible;
-    
+
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = null!;
+
     public string? name = "";
     private IEnumerable<Claim>? userClaims;
-    
+
     protected override async Task OnInitializedAsync()
     {
-        
         try
         {
-            AuthenticationState authState = await AuthState;
-            ClaimsPrincipal user = authState.User;
+            var authState = await AuthState;
+            var user = authState.User;
 
             userClaims = user.Claims;
             name = user.Identity!.Name!;
-            int depotID = brugerLogic.GetBruger(name).Result.DepotID;
+            var depotID = brugerLogic.GetBruger(name).Result.DepotID;
             aktier = await aktieService.GetDepot(depotID);
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
-            
         }
     }
+
     protected override void OnAfterRender(bool firstRender)
     {
-        
         getSaldo();
         StateHasChanged();
-        if(firstRender)
+        if (firstRender)
         {
-            //do nothing
+    //do nothing
         }
-       
     }
-    
+
     private async Task getSaldo()
     {
         saldo = TopBar.saldo;
-        
     }
-    
-    
+
 
     private Task ShowModal()
     {
-        
         modalVisible = true;
 
         return Task.CompletedTask;
@@ -180,52 +180,47 @@
 
         return Task.CompletedTask;
     }
-    
+
     private void updatePrice()
     {
         AktieTotal = AktieAntal * selectedAktie.købspris;
     }
-    
-    
+
+
     private void sellAktie()
     {
-        
-        Aktie aktie = new Aktie()
+        var aktie = new Aktie
         {
             Firma = selectedAktie.AktieNavn,
             High = selectedAktie.købspris,
             Low = selectedAktie.købspris,
             Navn = selectedAktie.AktieNavn,
             Pris = selectedAktie.købspris
-         
         };
-        
-        
-       
-        int depotID = brugerLogic.GetBruger(name).Result.DepotID;
-        double saldo = brugerLogic.GetBruger(name).Result.Saldo;
 
-        if (AktieAntal>selectedAktie.Antal || AktieAntal == 0)
+
+        var depotID = brugerLogic.GetBruger(name).Result.DepotID;
+        var saldo = brugerLogic.GetBruger(name).Result.Saldo;
+
+        if (AktieAntal > selectedAktie.Antal || AktieAntal == 0)
         {
             errorBuy = true;
             HideModal();
         }
-        else if(selectedAktie.Antal==AktieAntal)
+        else if (selectedAktie.Antal == AktieAntal)
         {
-            aktieService.sellAktie(AktieAntal , depotID, aktie);
+            aktieService.sellAktie(AktieAntal, depotID, aktie);
             successBuy = true;
             HideModal();
             Console.WriteLine("sell all");
         }
         else
         {
-            aktieService.sellAktie(selectedAktie.Antal-AktieAntal , depotID, aktie);
+            aktieService.sellAktie(selectedAktie.Antal - AktieAntal, depotID, aktie);
             successBuy = true;
             HideModal();
             Console.WriteLine("Not all");
-            
         }
-      
-
     }
+
 }

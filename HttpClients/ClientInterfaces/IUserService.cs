@@ -1,5 +1,4 @@
-﻿using Domain.DTOs;
-using Domain.Models;
+﻿using Domain.Models;
 
 namespace HttpClients.ClientInterfaces;
 

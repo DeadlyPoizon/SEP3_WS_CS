@@ -4,54 +4,55 @@
 @inject IBrugerLogic brugerLogic
 
 
-
 <h3>Indstillinger</h3>
 <Row>
     <Column ColumnSize="ColumnSize.Is4">
         <Card Background="Background.Light">
             <CardHeader TextWeight="TextWeight.Bold">Nulstil fremskridt</CardHeader>
-            <CardTitle Size="3" Padding="Padding.Is4.OnX.Is4.OnY"><Button onclick="@resetBruger"Color="Color.Danger" >Nulstil fremskridt</Button></CardTitle>
-            </Card>
+            <CardTitle Size="3" Padding="Padding.Is4.OnX.Is4.OnY">
+                <Button onclick="@resetBruger"Color="Color.Danger">Nulstil fremskridt</Button>
+            </CardTitle>
+        </Card>
     </Column>
     <Column ColumnSize="ColumnSize.Is4">
-            <Card Background="Background.Light">
-                <CardHeader TextWeight="TextWeight.Bold">Slet Konto</CardHeader>
-                <CardTitle Size="3" Padding="Padding.Is4.OnX.Is4.OnY"><Button Color="Color.Danger" >Slet Konto</Button></CardTitle>
-            </Card>
-        </Column>
+        <Card Background="Background.Light">
+            <CardHeader TextWeight="TextWeight.Bold">Slet Konto</CardHeader>
+            <CardTitle Size="3" Padding="Padding.Is4.OnX.Is4.OnY">
+                <Button Color="Color.Danger">Slet Konto</Button>
+            </CardTitle>
+        </Card>
+    </Column>
 </Row>
 
 
-
 @code {
+
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = null!;
+
     public string? name = "";
     private IEnumerable<Claim>? userClaims;
-    
+
     protected override async Task OnInitializedAsync()
     {
-        
         try
         {
-            AuthenticationState authState = await AuthState;
-            ClaimsPrincipal user = authState.User;
+            var authState = await AuthState;
+            var user = authState.User;
 
             userClaims = user.Claims;
             name = user.Identity!.Name!;
-
-
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
-            
         }
     }
 
     private void resetBruger()
     {
-        int depotId = brugerLogic.GetBruger(name).Result.DepotID;
+        var depotId = brugerLogic.GetBruger(name).Result.DepotID;
         brugerLogic.resetBruger(depotId);
     }
+
 }

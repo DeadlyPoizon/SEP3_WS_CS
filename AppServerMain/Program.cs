@@ -1,14 +1,12 @@
 ﻿using AppServerMain.StockAPI;
 
-namespace AppServerMain
+namespace AppServerMain;
+
+internal class Program
 {
-    class Program
+    private static void Main(string[] args)
     {
-        static void Main(String[] args)
-        {
-            APIController apiController = new APIController();
-            Console.WriteLine("done");
-        }
+        var apiController = new APIController();
+        Console.WriteLine("done");
     }
 }
-

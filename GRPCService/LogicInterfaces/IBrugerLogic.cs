@@ -5,11 +5,10 @@ namespace GRPCService.LogicInterfaces;
 
 public interface IBrugerLogic
 {
-   Task<BrugerResponse> CreateBruger(Bruger bruger);
+    Task<BrugerResponse> CreateBruger(Bruger bruger);
 
-    Task<Bruger> GetBruger(String username);
+    Task<Bruger> GetBruger(string username);
 
-    
+
     Task<BrugerResponse> resetBruger(int depotid);
-
 }

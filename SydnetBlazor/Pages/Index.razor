@@ -1,8 +1,8 @@
 ﻿@page "/"
-@using GRPCService.LogicInterfaces
 @using SydnetBlazor.Services
-@using Domain.Models
+@using GRPCService.LogicInterfaces
 @using System.Security.Claims
+@using Domain.Models
 @inject IAuthService authService
 @inject IBrugerLogic brugerLogic
 @inject NavigationManager navMgr
@@ -10,15 +10,19 @@
 <PageTitle>Forside</PageTitle>
 <Div>
     <Div Position="Position.Absolute.Top.Is50.Start.Is50.Translate.Middle">
-        <h1><a href="/"><img class="logo" src="Sydnet_LogoIndex.png"/></a></h1>
-        
+        <h1>
+            <a href="/">
+                <img class="logo" src="Sydnet_LogoIndex.png"/>
+            </a>
+        </h1>
+
         Danmarks største investeringsplatform.
         <br>
-        
+
         <AuthorizeView>
             <NotAuthorized>
-            <Button Color="Color.Primary" onclick="@ShowModal">Sign up</Button>
-            <Button Color="Color.Secondary" onclick="@ShowModal2">Login</Button>
+                <Button Color="Color.Primary" onclick="@ShowModal">Sign up</Button>
+                <Button Color="Color.Secondary" onclick="@ShowModal2">Login</Button>
             </NotAuthorized>
         </AuthorizeView>
     </Div>
@@ -26,74 +30,75 @@
 
 <AuthorizeView>
     <NotAuthorized>
-    <Modal @ref="loginModal">
-        <ModalContent Centered>
-            <ModalHeader>
-                <ModalTitle>Login</ModalTitle>
+        <Modal @ref="loginModal">
+            <ModalContent Centered>
+                <ModalHeader>
+                    <ModalTitle>Login</ModalTitle>
 
-            </ModalHeader>
-            <ModalBody>
-                <Field>
-                    <FieldLabel>Username</FieldLabel>
-                    <TextEdit @bind-Text="userName" MaxLength="25" Placeholder="Username">
-                        <Feedback>
-                            <ValidationError>Brugeren eksisterer ikke</ValidationError>
-                        </Feedback>
-                    </TextEdit>
-                </Field>
-                <Field>
-                    <FieldLabel>Password</FieldLabel>
-                    <TextEdit @bind-Text="password" Role="TextRole.Password" Placeholder="Password">
-                        <Feedback>
-                            <ValidationError>Forkert password!</ValidationError>
-                        </Feedback>
-                    </TextEdit>
-                </Field>
-            </ModalBody>
-            <ModalFooter>
-                <Button Color="Color.Secondary" Clicked="@HideModal2">Luk</Button>
-                <Button Color="Color.Primary" Clicked="@LoginAsync">Login</Button>
-            </ModalFooter>
-        </ModalContent>
-    </Modal>
+                </ModalHeader>
+                <ModalBody>
+                    <Field>
+                        <FieldLabel>Username</FieldLabel>
+                        <TextEdit @bind-Text="userName" MaxLength="25" Placeholder="Username">
+                            <Feedback>
+                                <ValidationError>Brugeren eksisterer ikke</ValidationError>
+                            </Feedback>
+                        </TextEdit>
+                    </Field>
+                    <Field>
+                        <FieldLabel>Password</FieldLabel>
+                        <TextEdit @bind-Text="password" Role="TextRole.Password" Placeholder="Password">
+                            <Feedback>
+                                <ValidationError>Forkert password!</ValidationError>
+                            </Feedback>
+                        </TextEdit>
+                    </Field>
+                </ModalBody>
+                <ModalFooter>
+                    <Button Color="Color.Secondary" Clicked="@HideModal2">Luk</Button>
+                    <Button Color="Color.Primary" Clicked="@LoginAsync">Login</Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
 
 
-    <Modal @ref="registerModal">
-        <ModalContent Centered>
-            <ModalHeader>
-                <ModalTitle>Sign Up</ModalTitle>
+        <Modal @ref="registerModal">
+            <ModalContent Centered>
+                <ModalHeader>
+                    <ModalTitle>Sign Up</ModalTitle>
 
-            </ModalHeader>
-            <ModalBody>
-                <Field>
-                    <FieldLabel>Username</FieldLabel>
-                    <TextEdit @bind-Text="userName" MaxLength="25" Placeholder="Username">
-                        <Feedback>
-                            <ValidationSuccess>Name is good.</ValidationSuccess>
-                            <ValidationError>Enter valid name!</ValidationError>
-                        </Feedback>
-                    </TextEdit>
-                </Field>
-                <Field>
-                    <FieldLabel>Password</FieldLabel>
-                    <TextEdit @bind-Text="password" Role="TextRole.Password" Placeholder="Password"/>
-                </Field>
-            </ModalBody>
-            <ModalFooter>
-                <Button Color="Color.Secondary" Clicked="@HideModal">Luk</Button>
-                <Button Color="Color.Primary" Clicked="@RegisterAsync">Opret Bruger</Button>
-            </ModalFooter>
-        </ModalContent>
-    </Modal>
+                </ModalHeader>
+                <ModalBody>
+                    <Field>
+                        <FieldLabel>Username</FieldLabel>
+                        <TextEdit @bind-Text="userName" MaxLength="25" Placeholder="Username">
+                            <Feedback>
+                                <ValidationSuccess>Name is good.</ValidationSuccess>
+                                <ValidationError>Enter valid name!</ValidationError>
+                            </Feedback>
+                        </TextEdit>
+                    </Field>
+                    <Field>
+                        <FieldLabel>Password</FieldLabel>
+                        <TextEdit @bind-Text="password" Role="TextRole.Password" Placeholder="Password"/>
+                    </Field>
+                </ModalBody>
+                <ModalFooter>
+                    <Button Color="Color.Secondary" Clicked="@HideModal">Luk</Button>
+                    <Button Color="Color.Primary" Clicked="@RegisterAsync">Opret Bruger</Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
     </NotAuthorized>
 </AuthorizeView>
+
 @code{
-    
+
     private string userName;
     private string password;
     private string errorLabel;
     private string color = "";
-    
+
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = null!;
 
@@ -107,8 +112,8 @@
         {
             await authService.LoginAsync(userName, password);
             navMgr.NavigateTo("/");
-            AuthenticationState authState = await AuthState;
-            ClaimsPrincipal user = authState.User;
+            var authState = await AuthState;
+            var user = authState.User;
 
             userClaims = user.Claims;
             name = user.Identity!.Name!;
@@ -121,13 +126,13 @@
             errorLabel = $"Error: {e.Message}";
         }
     }
-    
+
     private async Task RegisterAsync()
     {
         errorLabel = "";
         try
         {
-            await brugerLogic.CreateBruger(new Bruger(userName,password));
+            await brugerLogic.CreateBruger(new Bruger(userName, password));
             navMgr.NavigateTo("/Portfolio");
             HideModal();
             userName = "";
@@ -141,6 +146,7 @@
             errorLabel = $"Error: {e.Message}";
         }
     }
+
     private Modal registerModal;
     private Modal loginModal;
 
@@ -157,7 +163,7 @@
 
         return Task.CompletedTask;
     }
-    
+
     private Task ShowModal2()
     {
         loginModal.Show();
@@ -171,6 +177,6 @@
 
         return Task.CompletedTask;
     }
-    
-    
+
+
 }
