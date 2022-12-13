@@ -46,7 +46,7 @@ public class UserController : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
-    public async Task<ActionResult> DeleteAsync([FromRoute] int id)
+    public async Task<ActionResult> ResetUserAsync([FromRoute] int id)
     {
         try
         {

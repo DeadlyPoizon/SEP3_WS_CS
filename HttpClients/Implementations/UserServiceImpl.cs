@@ -27,9 +27,9 @@ public class UserServiceImpl : IUserService
         return create;
     }
 
-    public async Task resetBruger(string depotID)
+    public async Task resetBruger(int depotID)
     {
-        var response = await client.DeleteAsync($"Bruger/{depotID}");
+        var response = await client.DeleteAsync($"User/{depotID}");
         if (!response.IsSuccessStatusCode)
         {
             var content = await response.Content.ReadAsStringAsync();

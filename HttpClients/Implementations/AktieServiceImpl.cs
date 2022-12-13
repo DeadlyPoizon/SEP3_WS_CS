@@ -88,4 +88,18 @@ public class AktieServiceImpl : IAktieService
         var result = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode) throw new Exception(result);
     }
+    
+    public async Task<List<Transaktion>> GetTransaktioner(string username)
+    {
+        var response = await client.GetAsync($"/Transaktion?username={username}");
+        var result = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode) throw new Exception(result);
+
+        List<Transaktion> transaktioner = JsonSerializer.Deserialize<List<Transaktion>>(result, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        })!;
+
+        return transaktioner;
+    }
 }

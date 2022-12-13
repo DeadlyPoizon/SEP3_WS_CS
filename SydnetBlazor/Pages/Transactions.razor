@@ -2,23 +2,24 @@
 @using GRPCService.LogicInterfaces
 @using SydnetBlazor.Data
 @using System.Security.Claims
+@using Domain.Models
+@using HttpClients.ClientInterfaces
 @inject IBrugerLogic brugerLogic
+@inject IAktieService aktieService
 
 <h3>Transaktioner</h3>
 
-<DataGrid TItem="TempTransaktioner" Data="@aktieList" Responsive ShowPager>
-    <DataGridColumn Field="@nameof(TempTransaktioner.Firma)" Caption="Firma" Editable="false"></DataGridColumn>
-    <DataGridColumn Field="@nameof(TempTransaktioner.Forkortelse)" Caption="Forkortelse" Editable="false" Filterable="false"></DataGridColumn>
-    <DataGridColumn Field="@nameof(TempTransaktioner.PriceBought)" Caption="Pris købt" Editable="false" Filterable="false"></DataGridColumn>
-    <DataGridColumn Field="@nameof(TempTransaktioner.Antal)" Caption="Antal" Editable="false" Filterable="false"></DataGridColumn>
-    <DataGridColumn Field="@nameof(TempTransaktioner.Dato)" Caption="Dato / Tid" Editable="false" Filterable="false"></DataGridColumn>
+<DataGrid TItem="Transaktion" Data="@transaktioner" Responsive ShowPager>
+    <DataGridColumn Field="@nameof(Transaktion.ID)" Caption="TransaktionsID" Editable="false"></DataGridColumn>
+    <DataGridColumn Field="@nameof(Transaktion.Aktienavn)" Caption="Aktienavn" Editable="false" Filterable="false"></DataGridColumn>
+    <DataGridColumn Field="@nameof(Transaktion.antal)" Caption="Antal" Editable="false" Filterable="false"></DataGridColumn>
+    <DataGridColumn Field="@nameof(Transaktion.Date)" Caption="Dato / Tid" Editable="false" Filterable="false"></DataGridColumn>
 </DataGrid>
 
 
 @code {
 
-    private readonly List<TempTransaktioner> aktieList = new() { new TempTransaktioner { Firma = "Tesla", Forkortelse = "TSLA", PriceBought = 1000.5, Antal = 2, Dato = "05-12-2022 11:16:55" }, new TempTransaktioner { Firma = "Tesla", Forkortelse = "TSLA", PriceBought = 1000.5, Antal = 2, Dato = "05-12-2022 11:16:55" } };
-
+    private List<Transaktion> transaktioner;
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = null!;
 
@@ -34,7 +35,7 @@
 
             userClaims = user.Claims;
             name = user.Identity!.Name!;
-            getTransactions();
+            transaktioner = await aktieService.GetTransaktioner(name);
         }
         catch (Exception e)
         {
@@ -42,11 +43,6 @@
         }
     }
 
-    private List<Transactions> getTransactions()
-    {
-        var transactionsList = new List<Transactions>();
-
-        return transactionsList;
-    }
+  
 
 }
