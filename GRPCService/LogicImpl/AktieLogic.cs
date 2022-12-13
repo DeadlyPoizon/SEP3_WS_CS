@@ -83,9 +83,9 @@ public class AktieLogic : IAktieLogic
         return aktie;
     }
 
-    public async Task<List<Domain.Models.Depot>> getAllAktierFromDepot(int depotID)
+    public async Task<List<Depot>> getAllAktierFromDepot(int depotID)
     {
-        List<Domain.Models.Depot> depoter;
+        List<Depot> depoter;
         var client = new BrugerService.BrugerServiceClient(GrpcChannel.ForAddress("http://localhost:1337"));
         getDepotFraID depotFraId = new getDepotFraID()
         {

@@ -12,4 +12,8 @@ public interface IAktieLogic
     Task<List<Aktie>> getAllAktier();
 
     Task<AktieResponse> buyAktie(int antal, int depotID, Aktie aktie);
+    
+    Task<AktieResponse> sellAktie(int antal, int depotID, Aktie aktie);
+
+    Task<List<Domain.Models.Depot>> getAllAktierFromDepot(int depotID);
 }

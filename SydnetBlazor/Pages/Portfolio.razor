@@ -1,6 +1,13 @@
 ﻿@page "/Portfolio"
 
 @using SydnetBlazor.Data
+@using Domain.Models
+@using GRPCService.LogicInterfaces
+@using HttpClients.ClientInterfaces
+@using System.Security.Claims
+@inject IAktieService aktieService
+@inject IBrugerLogic brugerLogic
+@inject IAktieLogic aktieLogic
 
 <AuthorizeView>
 <body>
@@ -27,12 +34,10 @@
 </Row>
 <Row Padding="Padding.Is4.OnY">
     <Column ColumnSize="ColumnSize.Is8">
-        <DataGrid TItem="TempAktie" Data="@aktieList" @bind-SelectedRow="@selectedAktie" Filterable Responsive>
-            <DataGridColumn Field="@nameof(TempAktie.Firma)" Caption="Firma" Editable="false"></DataGridColumn>
-            <DataGridColumn Field="@nameof(TempAktie.Forkortelse)" Caption="Forkortelse" Editable="false" Filterable="false"></DataGridColumn>
-            <DataGridColumn Field="@nameof(TempAktie.Price)" Caption="Købspris" Editable="false" Filterable="false"></DataGridColumn>
-            <DataGridColumn Field="@nameof(TempAktie.PriceHigh)" Caption="Antal" Editable="false" Filterable="false"></DataGridColumn>
-            <DataGridColumn Field="@nameof(TempAktie.PriceLow)" Caption="Nuværende Pris" Editable="false" Filterable="false"></DataGridColumn>
+        <DataGrid TItem="Depot" Data="@aktier" @bind-SelectedRow="@selectedAktie" Filterable Responsive>
+            <DataGridColumn Field="@nameof(Depot.AktieNavn)" Caption="Firma" Editable="false"></DataGridColumn>
+            <DataGridColumn Field="@nameof(Depot.Antal)" Caption="Antal" Editable="false" Filterable="false"></DataGridColumn>
+            <DataGridColumn Field="@nameof(Depot.købspris)" Caption="Købspris" Editable="false" Filterable="false"></DataGridColumn>
             <DataGridColumn Filterable="false" Caption="Profit / Loss"></DataGridColumn>
             <DataGridColumn Filterable="false">
                 <DisplayTemplate Context="john">
@@ -62,51 +67,95 @@
         <ModalBody>
             <Field>
                 <FieldLabel>Firma</FieldLabel>
-                <TextEdit Text="@selectedAktie.Firma" ReadOnly="true" />
+                <TextEdit Text="@selectedAktie.AktieNavn" ReadOnly="true" />
             </Field>
             <Field>
-                <FieldLabel>Pris</FieldLabel>
-                <TextEdit Text="@selectedAktie.Price.ToString()" ReadOnly="true"/>
+                <FieldLabel>Købspris</FieldLabel>
+                <TextEdit Text="@selectedAktie.købspris.ToString()" ReadOnly="true"/>
             </Field>
             
+               <Field>
+                            <FieldLabel>Antal Ejet</FieldLabel>
+                            <TextEdit Text="@selectedAktie.Antal.ToString()" ReadOnly="true"/>
+                        </Field>
+            
+            
             <Field>
-                <FieldLabel>Antal</FieldLabel>
+                <FieldLabel>Antal Du Vil Sælge</FieldLabel>
                 <NumericEdit @bind-Value="AktieAntal" @onchange="updatePrice" TValue="int"/>
             </Field>
             
             <Field>
-                <FieldLabel>Ordre Pris</FieldLabel>
+                <FieldLabel>Samlet  Salgspris</FieldLabel>
                 <NumericEdit @bind-Value="AktieTotal" TValue="double" ReadOnly="true"/>
             </Field>
             
         </ModalBody>
         <ModalFooter>
             <Button Color="Color.Secondary" Clicked="@HideModal">Luk</Button>
-            <Button Color="Color.Success" Clicked="@HideModal">Sælg</Button>
+            <Button Color="Color.Success" Clicked="@sellAktie">Sælg</Button>
         </ModalFooter>
     </ModalContent>
 </Modal>
 
+<Alert Color="Color.Danger" @bind-Visible="@errorBuy">
+    <AlertMessage>Fejl!</AlertMessage>
+    <AlertDescription>Du prøver at sælge flere aktier end du ejer</AlertDescription>
+    <CloseButton />
+</Alert>
+
+<Alert Color="Color.Success" @bind-Visible="@successBuy">
+    <AlertMessage>Succes!</AlertMessage>
+        <AlertDescription>Aktie Solgt!</AlertDescription>
+    <CloseButton />
+</Alert>
+
 
 @code{
-
-    private List<TempAktie> aktieList = new() { new() { Firma = "Tesla", Forkortelse = "TSLA", Price = 1000.5, PriceHigh = 1200, PriceLow = 800}, new() { Firma = "Microsoft", Forkortelse = "MCS", Price = 500, PriceHigh = 900, PriceLow = 200} };
-    
-    public TempAktie? selectedAktie = new TempAktie();
+    bool errorBuy = false;
+    bool successBuy = false;
+    private List<Depot>? aktier;
+    public Depot? selectedAktie = new Depot();
 
     public int AktieAntal = 0;
     public double AktieTotal = 0.00;
     public static double saldo = 0;
     private bool modalVisible;
     
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;
+    public string? name = "";
+    private IEnumerable<Claim>? userClaims;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        
+        try
+        {
+            AuthenticationState authState = await AuthState;
+            ClaimsPrincipal user = authState.User;
+
+            userClaims = user.Claims;
+            name = user.Identity!.Name!;
+            int depotID = brugerLogic.GetBruger(name).Result.DepotID;
+            aktier = await aktieService.GetDepot(depotID);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            
+        }
+    }
     protected override void OnAfterRender(bool firstRender)
     {
+        
         getSaldo();
+        StateHasChanged();
         if(firstRender)
         {
             //do nothing
         }
-        StateHasChanged();
+       
     }
     
     private async Task getSaldo()
@@ -134,7 +183,49 @@
     
     private void updatePrice()
     {
-        AktieTotal = AktieAntal * selectedAktie.Price;
+        AktieTotal = AktieAntal * selectedAktie.købspris;
     }
     
+    
+    private void sellAktie()
+    {
+        
+        Aktie aktie = new Aktie()
+        {
+            Firma = selectedAktie.AktieNavn,
+            High = selectedAktie.købspris,
+            Low = selectedAktie.købspris,
+            Navn = selectedAktie.AktieNavn,
+            Pris = selectedAktie.købspris
+         
+        };
+        
+        
+       
+        int depotID = brugerLogic.GetBruger(name).Result.DepotID;
+        double saldo = brugerLogic.GetBruger(name).Result.Saldo;
+
+        if (AktieAntal>selectedAktie.Antal || AktieAntal == 0)
+        {
+            errorBuy = true;
+            HideModal();
+        }
+        else if(selectedAktie.Antal==AktieAntal)
+        {
+            aktieService.sellAktie(AktieAntal , depotID, aktie);
+            successBuy = true;
+            HideModal();
+            Console.WriteLine("sell all");
+        }
+        else
+        {
+            aktieService.sellAktie(selectedAktie.Antal-AktieAntal , depotID, aktie);
+            successBuy = true;
+            HideModal();
+            Console.WriteLine("Not all");
+            
+        }
+      
+
+    }
 }

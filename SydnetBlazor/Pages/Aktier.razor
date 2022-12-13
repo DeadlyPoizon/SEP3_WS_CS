@@ -131,12 +131,13 @@
         if (saldo<AktieTotal)
         {
             errorBuy = true;
+           HideModal();
         }
         else if (saldo>=AktieTotal)
         {
             AktieService.buyAktie(AktieAntal, depotID,aktie);
             successBuy = true;
-            HideModal();
+           HideModal();
         }
        
         
@@ -171,4 +172,10 @@
         AktieTotal = AktieAntal * selectedAktie.Pris;
     }
     
+    private async Task updateSaldo()
+    {
+        TopBar topbar = new TopBar();
+        await topbar.setSaldo();
+    }
+
 }

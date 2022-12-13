@@ -4,6 +4,7 @@ using Domain.DTOs;
 using GRPC.Bruger;
 using HttpClients.ClientInterfaces;
 using Aktie = Domain.Models.Aktie;
+using Depot = Domain.Models.Depot;
 
 namespace HttpClients.Implementations;
 
@@ -44,7 +45,7 @@ public class AktieServiceImpl : IAktieService
     public async Task<List<Aktie>> GetAllAktier()
     {
     
-        HttpResponseMessage response = await client.GetAsync("/Aktie");
+        HttpResponseMessage response = await client.GetAsync("/Aktie/all");
         string result = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
         {
@@ -58,8 +59,26 @@ public class AktieServiceImpl : IAktieService
         
         return aktier;
     }
+    
+    public async Task<List<Depot>> GetDepot(int depotID)
+    {
+    
+        HttpResponseMessage response = await client.GetAsync($"/Aktie/depot?depotID={depotID}");
+        string result = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(result);
+        }
 
-   public async Task buyAktie(int antal, int depotID, Aktie aktie)
+        List<Depot> aktier = JsonSerializer.Deserialize<List<Depot>>(result, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        })!;
+        
+        return aktier;
+    }
+
+    public async Task buyAktie(int antal, int depotID, Aktie aktie)
     {
         AktieRequestDTO requestDto = new AktieRequestDTO()
         {
@@ -70,12 +89,31 @@ public class AktieServiceImpl : IAktieService
 
         };
             
-        HttpResponseMessage response = await client.PostAsJsonAsync("/Aktie",requestDto);
+        HttpResponseMessage response = await client.PostAsJsonAsync("/Aktie/buy",requestDto);
         string result = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
         {
             throw new Exception(result);
         }
-        
+
+    }
+
+    public async Task sellAktie(int antal, int depotID, Aktie aktie)
+    {
+        AktieRequestDTO requestDto = new AktieRequestDTO()
+        {
+            antal = antal,
+            depotID = depotID,
+            aktie = aktie,
+            param = "sell"
+
+        };
+            
+        HttpResponseMessage response = await client.PostAsJsonAsync("/Aktie/sell",requestDto);
+        string result = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(result);
+        }
     }
 }

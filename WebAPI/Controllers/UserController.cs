@@ -38,7 +38,7 @@ public class UserController : ControllerBase
         }
         
         [HttpPost]
-        public async Task<ActionResult<Domain.Models.Bruger>> CreateAsync(Bruger bruger)
+        public async Task<ActionResult<Bruger>> CreateAsync(Bruger bruger)
         {
             try
             {
