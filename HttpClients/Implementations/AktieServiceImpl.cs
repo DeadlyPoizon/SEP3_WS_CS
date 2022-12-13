@@ -16,18 +16,17 @@ public class AktieServiceImpl : IAktieService
     }
 
 
-    public async Task<IEnumerable<Aktie>> Getaktie(string? aktie)
+    public async Task<Aktie> Getaktie(string navn)
     {
-        var uri = "/aktier";
-        if (!string.IsNullOrEmpty(aktie)) uri += $"?aktie={aktie}";
-        var response = await client.GetAsync(uri);
+        var response = await client.GetAsync($"/Aktie?name={navn}");
         var result = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode) throw new Exception(result);
 
-        var aktier = JsonSerializer.Deserialize<IEnumerable<Aktie>>(result, new JsonSerializerOptions
+        var aktier = JsonSerializer.Deserialize<Aktie>(result, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         })!;
+
         return aktier;
     }
 

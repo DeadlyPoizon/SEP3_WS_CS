@@ -38,11 +38,11 @@
     </Row>
     <Row Padding="Padding.Is4.OnY">
         <Column ColumnSize="ColumnSize.Is8">
-            <DataGrid TItem="Depot" Data="@aktier" @bind-SelectedRow="@selectedAktie" Filterable Responsive>
+            <DataGrid TItem="Depot" Data="@depoter" @bind-SelectedRow="@selectedAktie" Filterable Responsive>
                 <DataGridColumn Field="@nameof(Depot.AktieNavn)" Caption="Firma" Editable="false"></DataGridColumn>
                 <DataGridColumn Field="@nameof(Depot.Antal)" Caption="Antal" Editable="false" Filterable="false"></DataGridColumn>
                 <DataGridColumn Field="@nameof(Depot.købspris)" Caption="Købspris" Editable="false" Filterable="false"></DataGridColumn>
-                <DataGridColumn Filterable="false" Caption="Profit / Loss"></DataGridColumn>
+                <DataGridColumn Field="@nameof(Depot.difference)" Caption="P/L i %" Editable="false" Filterable="false"></DataGridColumn>
                 <DataGridColumn Filterable="false">
                     <DisplayTemplate Context="john">
                         <Button Color="Color.Success" Clicked="@(() => ShowModal())">
@@ -119,7 +119,7 @@
 @code{
     bool errorBuy;
     bool successBuy;
-    private List<Depot>? aktier;
+    private List<Depot>? depoter = new ();
     public Depot? selectedAktie = new();
 
     public int AktieAntal;
@@ -143,7 +143,17 @@
             userClaims = user.Claims;
             name = user.Identity!.Name!;
             var depotID = brugerLogic.GetBruger(name).Result.DepotID;
-            aktier = await aktieService.GetDepot(depotID);
+            depoter = await aktieService.GetDepot(depotID);
+
+            for (int i = 0; i < depoter.Count; i++)
+            {
+                Aktie temp = await aktieService.Getaktie(depoter[i].AktieNavn);
+                double tempdouble = temp.Low;
+                Console.WriteLine(tempdouble);
+                depoter[i].difference = updateProfitLoss(depoter[i].købspris, tempdouble);
+                Console.WriteLine(depoter[i].difference);
+            }
+            
         }
         catch (Exception e)
         {
@@ -185,6 +195,14 @@
     {
         AktieTotal = AktieAntal * selectedAktie.købspris;
     }
+    
+    private double updateProfitLoss(double depotpris, double aktiepris)
+    {
+        
+        double diff = aktiepris - depotpris;
+        double percentage = diff / depotpris * 100;
+        return Math.Round(percentage, 4);
+    }
 
 
     private void sellAktie()
@@ -212,14 +230,15 @@
             aktieService.sellAktie(AktieAntal, depotID, aktie);
             successBuy = true;
             HideModal();
-            Console.WriteLine("sell all");
+            TopBar.saldo = saldo + AktieTotal;
         }
         else
         {
             aktieService.sellAktie(selectedAktie.Antal - AktieAntal, depotID, aktie);
             successBuy = true;
             HideModal();
-            Console.WriteLine("Not all");
+            TopBar.saldo = saldo + AktieTotal;
+           
         }
     }
 

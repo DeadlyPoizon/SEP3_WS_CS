@@ -16,6 +16,21 @@ public class AktieController : ControllerBase
     {
         this.aktieLogic = aktieLogic;
     }
+    [HttpGet]
+    public async Task<ActionResult<Aktie>> GetAktieAsync(string name)
+    {
+        try
+        {
+            var aktier = await aktieLogic.getAktie(name);
+
+            return Ok(aktier);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 
     [HttpGet("all")]
     public async Task<ActionResult<List<Aktie>>> GetAktierAsync()

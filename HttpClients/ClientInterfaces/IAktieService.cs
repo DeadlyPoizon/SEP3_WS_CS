@@ -4,7 +4,7 @@ namespace HttpClients.ClientInterfaces;
 
 public interface IAktieService
 {
-    Task<IEnumerable<Aktie>> Getaktie(string? aktie = null);
+    Task<Aktie> Getaktie(string navn);
 
     Task<List<Aktie>> GetAllAktier();
 

@@ -125,7 +125,7 @@
 
             userClaims = user.Claims;
             name = user.Identity!.Name!;
-            saldo = brugerLogic.GetBruger(name).Result.Saldo;
+            saldo = Math.Round(brugerLogic.GetBruger(name).Result.Saldo, 2);
             HideModal2();
         }
         catch (Exception e)
@@ -144,7 +144,7 @@
     public async Task setSaldo()
     {
         name = "helmut";
-        saldo = brugerLogic.GetBruger(name).Result.Saldo;
+        saldo = Math.Round(brugerLogic.GetBruger(name).Result.Saldo, 2);
         StateHasChanged();
     }
 

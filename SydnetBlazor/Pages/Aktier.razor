@@ -99,7 +99,7 @@
 
             userClaims = user.Claims;
             name = user.Identity!.Name!;
-            apiController.init();
+            //apiController.init();
             aktier = await AktieService.GetAllAktier();
         }
         catch (Exception e)
@@ -134,6 +134,7 @@
             AktieService.buyAktie(AktieAntal, depotID, aktie);
             successBuy = true;
             HideModal();
+            TopBar.saldo = saldo - AktieTotal;
         }
     }
 
