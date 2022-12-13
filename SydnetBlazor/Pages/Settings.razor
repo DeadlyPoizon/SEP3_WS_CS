@@ -1,7 +1,9 @@
 ﻿@page "/Settings"
 @using GRPCService.LogicInterfaces
 @using System.Security.Claims
+@using HttpClients.ClientInterfaces
 @inject IBrugerLogic brugerLogic
+@inject IUserService userService
 
 
 <h3>Indstillinger</h3>
@@ -51,8 +53,9 @@
 
     private void resetBruger()
     {
-        var depotId = brugerLogic.GetBruger(name).Result.DepotID;
-        brugerLogic.resetBruger(depotId);
+        int depotId = brugerLogic.GetBruger(name).Result.DepotID;
+        userService.resetBruger(depotId);
+        Console.WriteLine("klunk");
     }
 
 }

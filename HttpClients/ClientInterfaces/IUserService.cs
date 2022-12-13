@@ -6,5 +6,5 @@ public interface IUserService
 {
     Task<Bruger> Create(Bruger bruger);
 
-    Task resetBruger(string depotID);
+    Task resetBruger(int depotID);
 }

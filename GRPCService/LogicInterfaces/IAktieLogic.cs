@@ -1,4 +1,5 @@
-﻿using GRPC.Bruger;
+﻿using Domain.Models;
+using GRPC.Bruger;
 using Aktie = Domain.Models.Aktie;
 using Depot = Domain.Models.Depot;
 
@@ -17,4 +18,8 @@ public interface IAktieLogic
     Task<AktieResponse> sellAktie(int antal, int depotID, Aktie aktie);
 
     Task<List<Depot>> getAllAktierFromDepot(int depotID);
+
+    Task<List<Transaktion>> getTransaktionerFraUsername(string username);
+
+
 }

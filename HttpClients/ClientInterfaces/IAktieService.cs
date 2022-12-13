@@ -13,4 +13,6 @@ public interface IAktieService
     Task sellAktie(int antal, int depotID, Aktie aktie);
 
     Task<List<Depot>> GetDepot(int depotID);
+
+    Task<List<Transaktion>> GetTransaktioner(string username);
 }
