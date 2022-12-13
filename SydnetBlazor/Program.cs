@@ -1,3 +1,4 @@
+using AppServerMain.StockAPI;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
@@ -32,7 +33,7 @@ builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthProvider>();
 builder.Services.AddScoped<IBrugerLogic, BrugerLogic>();
 builder.Services.AddScoped<IUserService, UserServiceImpl>();
 builder.Services.AddScoped<IAktieLogic, AktieLogic>();
-
+builder.Services.AddScoped<APIController>();
 
 var app = builder.Build();
 

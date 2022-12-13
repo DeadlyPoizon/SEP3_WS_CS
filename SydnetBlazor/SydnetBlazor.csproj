@@ -7,22 +7,23 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Blazorise.Bootstrap" Version="1.1.4.1"/>
-        <PackageReference Include="Blazorise.DataGrid" Version="1.1.4.1"/>
-        <PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.1.4.1"/>
+        <PackageReference Include="Blazorise.Bootstrap" Version="1.1.4.1" />
+        <PackageReference Include="Blazorise.DataGrid" Version="1.1.4.1" />
+        <PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.1.4.1" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\GRPCService\GRPCService.csproj"/>
-        <ProjectReference Include="..\HttpClients\HttpClients.csproj"/>
+        <ProjectReference Include="..\AppServerMain\AppServerMain.csproj" />
+        <ProjectReference Include="..\GRPCService\GRPCService.csproj" />
+        <ProjectReference Include="..\HttpClients\HttpClients.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Remove="Data\WeatherForecastService.cs"/>
+        <Compile Remove="Data\WeatherForecastService.cs" />
     </ItemGroup>
 
     <ItemGroup>
-        <Content Remove="Pages\FetchData.razor"/>
+        <Content Remove="Pages\FetchData.razor" />
     </ItemGroup>
 
 </Project>

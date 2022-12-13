@@ -3,9 +3,11 @@
 @using GRPCService.LogicInterfaces
 @using Domain.Models
 @using System.Security.Claims
+@using AppServerMain.StockAPI
 @attribute [Authorize]
 @inject IAktieService AktieService
 @inject IBrugerLogic brugerLogic
+@inject APIController apiController
 
 
 <body>
@@ -97,6 +99,7 @@
 
             userClaims = user.Claims;
             name = user.Identity!.Name!;
+            apiController.init();
             aktier = await AktieService.GetAllAktier();
         }
         catch (Exception e)

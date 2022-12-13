@@ -55,7 +55,7 @@
     {
         int depotId = brugerLogic.GetBruger(name).Result.DepotID;
         userService.resetBruger(depotId);
-        Console.WriteLine("klunk");
+        TopBar.saldo = 10000;
     }
 
 }
