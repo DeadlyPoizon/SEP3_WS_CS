@@ -109,7 +109,7 @@
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = null!;
 
-    public string? name = "";
+    public static string? name = "";
     private IEnumerable<Claim>? userClaims;
     public static double saldo = 0;
     
@@ -138,10 +138,18 @@
             errorLabel = $"Error: {e.Message}";
         }
     }
+    
 
     public double getSaldo()
     {
         return saldo;
+    }
+    
+    public async Task setSaldo()
+    {
+        name = "helmut";
+      saldo = brugerLogic.GetBruger(name).Result.Saldo;
+        StateHasChanged();
     }
     
     private async Task RegisterAsync()
