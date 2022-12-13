@@ -1,15 +1,17 @@
 ﻿@page "/Aktier"
 @using HttpClients.ClientInterfaces
 @using GRPCService.LogicInterfaces
+@using AppServerMain.StockAPI
 @using Domain.Models
 @using System.Security.Claims
-@using AppServerMain.StockAPI
 @attribute [Authorize]
 @inject IAktieService AktieService
 @inject IBrugerLogic brugerLogic
 @inject APIController apiController
-
-
+<HeadContent>
+    <PageTitle>Aktier</PageTitle>
+    
+</HeadContent>
 <body>
 
 <h3>Aktier</h3>
@@ -38,11 +40,11 @@
         <ModalBody>
             <Field>
                 <FieldLabel>Firma</FieldLabel>
-                <TextEdit Text="@selectedAktie.Firma" ReadOnly="true"/>
+                <TextEdit Text="@selectedAktie!.Firma" ReadOnly="true"/>
             </Field>
             <Field>
                 <FieldLabel>Pris</FieldLabel>
-                <TextEdit Text="@selectedAktie.Pris.ToString()" ReadOnly="true"/>
+                <TextEdit Text="@selectedAktie!.Pris.ToString()" ReadOnly="true"/>
             </Field>
 
             <Field>
@@ -81,7 +83,7 @@
     bool errorBuy;
     bool successBuy;
     private List<Aktie>? aktier;
-    private string msg = "";
+    
 
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = null!;
@@ -91,7 +93,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        msg = "";
+        
         try
         {
             var authState = await AuthState;
@@ -99,13 +101,12 @@
 
             userClaims = user.Claims;
             name = user.Identity!.Name!;
-            //apiController.init();
+            apiController.init();
             aktier = await AktieService.GetAllAktier();
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
-            msg = e.Message;
         }
     }
 
@@ -113,7 +114,7 @@
     {
         var aktie = new Aktie
         {
-            Firma = selectedAktie.Firma,
+            Firma = selectedAktie!.Firma,
             High = selectedAktie.High,
             Low = selectedAktie.Low,
             Navn = selectedAktie.Navn,
@@ -121,8 +122,8 @@
         };
 
 
-        var depotID = brugerLogic.GetBruger(name).Result.DepotID;
-        var saldo = brugerLogic.GetBruger(name).Result.Saldo;
+        var depotID = brugerLogic.GetBruger(name!).Result.DepotID;
+        var saldo = brugerLogic.GetBruger(name!).Result.Saldo;
 
         if (saldo < AktieTotal)
         {
@@ -162,7 +163,7 @@
 
     private void updatePrice()
     {
-        AktieTotal = AktieAntal * selectedAktie.Pris;
+        AktieTotal = AktieAntal * selectedAktie!.Pris;
     }
 
     private async Task updateSaldo()

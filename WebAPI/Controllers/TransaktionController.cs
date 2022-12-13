@@ -3,6 +3,7 @@ using GRPCService.LogicInterfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
+
 [ApiController]
 [Route("[controller]")]
 public class TransaktionController : ControllerBase
@@ -13,15 +14,14 @@ public class TransaktionController : ControllerBase
     {
         this.aktieLogic = aktieLogic;
     }
-    
+
     [HttpGet]
     public async Task<ActionResult<List<Transaktion>>> GetTransaktionerAsync(string username)
     {
         try
         {
+            var transaktioner = await aktieLogic.getTransaktionerFraUsername(username);
 
-            List<Transaktion> transaktioner = await aktieLogic.getTransaktionerFraUsername(username);
-                
             return Ok(transaktioner);
         }
         catch (Exception e)
@@ -30,5 +30,4 @@ public class TransaktionController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-    
 }

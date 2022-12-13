@@ -87,7 +87,7 @@ public class AktieLogic : IAktieLogic
         var depoterGRPC =
             JsonConvert.DeserializeObject<List<GRPC.Bruger.Depot>>(response.Depoter.ToString());
 
-        depoter = new List<Depot>(depoterGRPC.Count);
+        depoter = new List<Depot>(depoterGRPC!.Count);
 
         for (var i = 0; i < depoterGRPC.Count; i++)
         {
@@ -118,7 +118,7 @@ public class AktieLogic : IAktieLogic
         var allAktier = await client.getAllAsync(getAllAktier);
         var tempGRPC = JsonConvert.DeserializeObject<List<GRPC.Bruger.Aktie>>(allAktier.Aktier.ToString());
 
-        aktier = new List<Aktie>(tempGRPC.Count);
+        aktier = new List<Aktie>(tempGRPC!.Count);
         for (var i = 0; i < tempGRPC.Count; i++)
         {
             var tempaktie = new Aktie
@@ -195,7 +195,7 @@ public class AktieLogic : IAktieLogic
 
         var response = await client.getAllTransactionsAsync(request);
         var temp = JsonConvert.DeserializeObject<List<Transaction>>(response.Transaktioner.ToString());
-        transaktioner = new List<Transaktion>(temp.Count);
+        transaktioner = new List<Transaktion>(temp!.Count);
 
         for (var i = 0; i < temp.Count; i++)
         {

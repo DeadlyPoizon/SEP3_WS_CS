@@ -48,17 +48,14 @@
             <Field>
                 <FieldLabel>Username</FieldLabel>
                 <TextEdit @bind-Text="userName" MaxLength="25" Placeholder="Username">
-                    <Feedback>
-                        <ValidationError>Brugeren eksisterer ikke</ValidationError>
-                    </Feedback>
                 </TextEdit>
             </Field>
             <Field>
                 <FieldLabel>Password</FieldLabel>
                 <TextEdit @bind-Text="password" Role="TextRole.Password" Placeholder="Password">
-                    <Feedback>
-                        <ValidationError>Forkert password!</ValidationError>
-                    </Feedback>
+                    <label style="color: red">
+                                            @errorLabel
+                                        </label>
                 </TextEdit>
             </Field>
         </ModalBody>
@@ -79,16 +76,15 @@
         <ModalBody>
             <Field>
                 <FieldLabel>Username</FieldLabel>
-                <TextEdit @bind-Text="userName" MaxLength="25" Placeholder="Username">
-                    <Feedback>
-                        <ValidationSuccess>Name is good.</ValidationSuccess>
-                        <ValidationError>Enter valid name!</ValidationError>
-                    </Feedback>
+                <TextEdit @bind-Text="userName" MaxLength="25" Placeholder="Username - Between 6-25 Characters">
                 </TextEdit>
             </Field>
             <Field>
                 <FieldLabel>Password</FieldLabel>
-                <TextEdit @bind-Text="password" Role="TextRole.Password" Placeholder="Password"/>
+                <TextEdit @bind-Text="password" Role="TextRole.Password" Placeholder="Password - Minimum 8 Characters"/>
+                <label style="color: red">
+                    @errorLabel
+                    </label>
             </Field>
         </ModalBody>
         <ModalFooter>
@@ -126,12 +122,15 @@
             userClaims = user.Claims;
             name = user.Identity!.Name!;
             saldo = Math.Round(brugerLogic.GetBruger(name).Result.Saldo, 2);
-            HideModal2();
+            userName = "";
+            password = "";
+            await HideModal2();
+            
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            errorLabel = $"Error: {e.Message}";
+            Console.WriteLine(e.Message);
+            errorLabel = "Indtastede Oplysninger Er Forkerte";
         }
     }
 
@@ -143,8 +142,8 @@
 
     public async Task setSaldo()
     {
-        name = "helmut";
-        saldo = Math.Round(brugerLogic.GetBruger(name).Result.Saldo, 2);
+       
+        saldo = Math.Round(brugerLogic.GetBruger(name!).Result.Saldo, 2);
         StateHasChanged();
     }
 
@@ -153,18 +152,32 @@
         errorLabel = "";
         try
         {
-            await userService.Create(new Bruger(userName, password));
-            navMgr.NavigateTo("/Portfolio");
-            HideModal();
-            userName = "";
-            password = "";
-            errorLabel = "User successfully created";
-            color = "green";
+            if (userName.Length>25||userName.Length<7)
+            {
+                errorLabel = "Brugernavn enten for kort eller for langt";
+            }
+            else if (password.Length<8)
+            {
+                errorLabel = "Password For Kort";
+            }
+            else
+            {
+                await userService.Create(new Bruger(userName, password));
+                navMgr.NavigateTo("/");
+               
+                {
+                    HideModal();
+                    userName = "";
+                    password = "";
+                }
+                
+            }
+           
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            errorLabel = $"Error: {e.Message}";
+            Console.WriteLine(e.Message);
+            errorLabel = "Indtastede Oplysninger Overholder Ikke Kravene";
         }
     }
 
@@ -201,7 +214,8 @@
 
     private async Task LogoutAsync()
     {
-    // Ikke impl
+        await authService.LogoutAsync();
+        navMgr.NavigateTo("/");
     }
 
 }

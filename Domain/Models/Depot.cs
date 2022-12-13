@@ -9,6 +9,6 @@ public class Depot
     public int Antal { get; set; }
 
     public double købspris { get; set; }
-    
+
     public double? difference { get; set; }
 }

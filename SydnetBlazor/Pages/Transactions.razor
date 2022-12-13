@@ -1,12 +1,10 @@
 ﻿@page "/Transactions"
 @using GRPCService.LogicInterfaces
-@using SydnetBlazor.Data
-@using System.Security.Claims
-@using Domain.Models
 @using HttpClients.ClientInterfaces
-@inject IBrugerLogic brugerLogic
+@using Domain.Models
+@using System.Security.Claims
 @inject IAktieService aktieService
-
+<PageTitle>Transaktioner</PageTitle>
 <h3>Transaktioner</h3>
 
 <DataGrid TItem="Transaktion" Data="@transaktioner" Responsive ShowPager>
@@ -20,6 +18,7 @@
 @code {
 
     private List<Transaktion> transaktioner;
+
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = null!;
 
@@ -43,6 +42,6 @@
         }
     }
 
-  
+
 
 }

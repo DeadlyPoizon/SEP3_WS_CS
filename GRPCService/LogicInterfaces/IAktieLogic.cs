@@ -20,6 +20,4 @@ public interface IAktieLogic
     Task<List<Depot>> getAllAktierFromDepot(int depotID);
 
     Task<List<Transaktion>> getTransaktionerFraUsername(string username);
-
-
 }

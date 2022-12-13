@@ -5,8 +5,8 @@
 @using System.Security.Claims
 @inject IAktieService aktieService
 @inject IBrugerLogic brugerLogic
-@inject IAktieLogic aktieLogic
 
+<PageTitle>Portefølje</PageTitle>
 <AuthorizeView>
     <body>
     <h3>Mit Portefølje</h3>
@@ -72,16 +72,16 @@
         <ModalBody>
             <Field>
                 <FieldLabel>Firma</FieldLabel>
-                <TextEdit Text="@selectedAktie.AktieNavn" ReadOnly="true"/>
+                <TextEdit Text="@selectedAktie!.AktieNavn" ReadOnly="true"/>
             </Field>
             <Field>
                 <FieldLabel>Købspris</FieldLabel>
-                <TextEdit Text="@selectedAktie.købspris.ToString()" ReadOnly="true"/>
+                <TextEdit Text="@selectedAktie!.købspris.ToString()" ReadOnly="true"/>
             </Field>
 
             <Field>
                 <FieldLabel>Antal Ejet</FieldLabel>
-                <TextEdit Text="@selectedAktie.Antal.ToString()" ReadOnly="true"/>
+                <TextEdit Text="@selectedAktie!.Antal.ToString()" ReadOnly="true"/>
             </Field>
 
 
@@ -119,7 +119,7 @@
 @code{
     bool errorBuy;
     bool successBuy;
-    private List<Depot>? depoter = new ();
+    private List<Depot>? depoter = new();
     public Depot? selectedAktie = new();
 
     public int AktieAntal;
@@ -145,15 +145,14 @@
             var depotID = brugerLogic.GetBruger(name).Result.DepotID;
             depoter = await aktieService.GetDepot(depotID);
 
-            for (int i = 0; i < depoter.Count; i++)
+            for (var i = 0; i < depoter.Count; i++)
             {
-                Aktie temp = await aktieService.Getaktie(depoter[i].AktieNavn);
-                double tempdouble = temp.Low;
+                var temp = await aktieService.Getaktie(depoter[i].AktieNavn);
+                var tempdouble = temp.Pris;
                 Console.WriteLine(tempdouble);
                 depoter[i].difference = updateProfitLoss(depoter[i].købspris, tempdouble);
                 Console.WriteLine(depoter[i].difference);
             }
-            
         }
         catch (Exception e)
         {
@@ -193,14 +192,13 @@
 
     private void updatePrice()
     {
-        AktieTotal = AktieAntal * selectedAktie.købspris;
+        AktieTotal = AktieAntal * selectedAktie!.købspris;
     }
-    
+
     private double updateProfitLoss(double depotpris, double aktiepris)
     {
-        
-        double diff = aktiepris - depotpris;
-        double percentage = diff / depotpris * 100;
+        var diff = aktiepris - depotpris;
+        var percentage = diff / depotpris * 100;
         return Math.Round(percentage, 4);
     }
 
@@ -209,7 +207,7 @@
     {
         var aktie = new Aktie
         {
-            Firma = selectedAktie.AktieNavn,
+            Firma = selectedAktie!.AktieNavn,
             High = selectedAktie.købspris,
             Low = selectedAktie.købspris,
             Navn = selectedAktie.AktieNavn,
@@ -217,8 +215,8 @@
         };
 
 
-        var depotID = brugerLogic.GetBruger(name).Result.DepotID;
-        var saldo = brugerLogic.GetBruger(name).Result.Saldo;
+        var depotID = brugerLogic.GetBruger(name!).Result.DepotID;
+        var saldo = brugerLogic.GetBruger(name!).Result.Saldo;
 
         if (AktieAntal > selectedAktie.Antal || AktieAntal == 0)
         {
@@ -232,14 +230,14 @@
             HideModal();
             TopBar.saldo = saldo + AktieTotal;
         }
-        else
+        else if (selectedAktie.Antal != AktieAntal)
         {
             aktieService.sellAktie(selectedAktie.Antal - AktieAntal, depotID, aktie);
             successBuy = true;
             HideModal();
             TopBar.saldo = saldo + AktieTotal;
-           
         }
+     
     }
 
 }

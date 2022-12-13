@@ -16,6 +16,7 @@ public class AktieController : ControllerBase
     {
         this.aktieLogic = aktieLogic;
     }
+
     [HttpGet]
     public async Task<ActionResult<Aktie>> GetAktieAsync(string name)
     {
@@ -71,7 +72,7 @@ public class AktieController : ControllerBase
         {
             var aktiee =
                 await aktieLogic.buyAktie(requestDto.antal, requestDto.depotID, requestDto.aktie);
-            return Ok();
+            return Ok(aktiee);
         }
         catch (Exception e)
         {

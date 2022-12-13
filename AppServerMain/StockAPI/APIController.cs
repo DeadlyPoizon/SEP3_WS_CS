@@ -22,7 +22,6 @@ public class APIController
         path = path.Replace('\\', '/');
         path += "/stocks.json";
         FilePath = path;
-        
     }
 
     public void init()
@@ -47,8 +46,7 @@ public class APIController
         var aktieLogic = new AktieLogic();
         await aktieLogic.updateAktie(aktie);
     }
-    
-    
+
 
     public void updateStocks(Dictionary<string, string> symbols)
     {

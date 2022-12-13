@@ -1,10 +1,10 @@
 ﻿@page "/Settings"
 @using GRPCService.LogicInterfaces
-@using System.Security.Claims
 @using HttpClients.ClientInterfaces
+@using System.Security.Claims
 @inject IBrugerLogic brugerLogic
 @inject IUserService userService
-
+<PageTitle>Indstillinger</PageTitle>
 
 <h3>Indstillinger</h3>
 <Row>
@@ -12,8 +12,11 @@
         <Card Background="Background.Light">
             <CardHeader TextWeight="TextWeight.Bold">Nulstil fremskridt</CardHeader>
             <CardTitle Size="3" Padding="Padding.Is4.OnX.Is4.OnY">
-                <Button onclick="@resetBruger"Color="Color.Danger">Nulstil fremskridt</Button>
+                <Button onclick="@resetBruger" Color="Color.Danger">Nulstil fremskridt</Button>
             </CardTitle>
+            <label style="color: green;text-align: center">
+                        @errorLabel
+                    </label>
         </Card>
     </Column>
     <Column ColumnSize="ColumnSize.Is4">
@@ -28,7 +31,7 @@
 
 
 @code {
-
+    private string errorLabel;
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = null!;
 
@@ -53,9 +56,10 @@
 
     private void resetBruger()
     {
-        int depotId = brugerLogic.GetBruger(name).Result.DepotID;
+        var depotId = brugerLogic.GetBruger(name!).Result.DepotID;
         userService.resetBruger(depotId);
         TopBar.saldo = 100000;
+        errorLabel = "Konto Nulstillet";
     }
 
 }
