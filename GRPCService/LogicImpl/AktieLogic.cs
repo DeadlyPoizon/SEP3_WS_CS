@@ -1,4 +1,5 @@
-﻿using Google.Protobuf.Collections;
+﻿using Domain.Models;
+using Google.Protobuf.Collections;
 using GRPC.Bruger;
 using Grpc.Net.Client;
 using GRPCService.LogicInterfaces;
@@ -190,6 +191,35 @@ public class AktieLogic : IAktieLogic
         AktieResponse response = await client.handleAktieAsync(aktieRequest);
 
         return response;
+    }
+
+    public async Task<List<Transaktion>> getTransaktionerFraUsername(String username)
+    { 
+        List<Transaktion> transaktioner;
+        var client = new BrugerService.BrugerServiceClient(GrpcChannel.ForAddress("http://localhost:1337"));
+        TransactionRequest request = new TransactionRequest()
+        {
+            Username = username
+        };
+
+        AllTransactions response = await client.getAllTransactionsAsync(request);
+        List<Transaction>? temp = JsonConvert.DeserializeObject<List<Transaction>>(response.Transaktioner.ToString());
+        transaktioner = new List<Transaktion>(temp.Count);
+
+        for (int i = 0; i < temp.Count; i++)
+        {
+            Transaktion transaktion = new Transaktion()
+            {
+                Aktienavn = temp[i].Aktienavn,
+                antal = temp[i].Antal,
+                Date = new DateTime(temp[i].Date),
+                ID = temp[i].TransaktionID,
+                username = temp[i].Username
+            };
+            transaktioner.Add(transaktion);
+        }
+
+        return transaktioner;
     }
     
 }

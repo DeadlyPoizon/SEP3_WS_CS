@@ -4,9 +4,9 @@ public class Transaktion
 {
     public int ID { get; set; }
     
-    public Bruger username { get; set; }
+    public string username { get; set; }
     
-    public Aktie Aktienavn { get; set; }
+    public string Aktienavn { get; set; }
     
     public int antal { get; set; }
     

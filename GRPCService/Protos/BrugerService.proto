@@ -65,6 +65,22 @@ message Depot{
   double pris = 4;
 }
 
+message Transaction{
+  int32 transaktionID = 1;
+  string username = 2;
+  string aktienavn = 3;
+  int32 antal = 4;
+  int64 date = 5;
+}
+
+message AllTransactions{
+  repeated Transaction transaktioner = 1;
+}
+
+message TransactionRequest{
+  string username = 1;
+}
+
 service BrugerService{
   rpc createBruger(Bruger) returns (BrugerResponse);
   rpc getBruger(BrugerRequest) returns (Bruger);
@@ -74,4 +90,5 @@ service BrugerService{
   rpc getAll(getAllAktier) returns (allAktier);
   rpc handleBruger(BrugerRequest) returns (BrugerResponse);
   rpc getAllDepoter(getDepotFraID) returns (DepotResponse);
+  rpc getAllTransactions(TransactionRequest) returns (AllTransactions);
 }
