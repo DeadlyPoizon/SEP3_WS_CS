@@ -47,6 +47,8 @@ public class APIController
         var aktieLogic = new AktieLogic();
         await aktieLogic.updateAktie(aktie);
     }
+    
+    
 
     public void updateStocks(Dictionary<string, string> symbols)
     {
